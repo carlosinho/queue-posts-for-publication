@@ -1,0 +1,237 @@
+/* Classic editor styles */
+#qpfp-queue-dropdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qpfp-dropdown-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+}
+
+.qpfp-dropdown-content h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.qpfp-dropdown-content select {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.qpfp-dropdown-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Block editor styles */
+.queue-posts-panel {
+    margin-top: 20px;
+}
+
+.queue-posts-content {
+    padding: 10px;
+}
+
+.queue-posts-button {
+    width: 100%;
+    justify-content: center;
+}
+
+.queue-posts-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.queue-posts-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#qpfp-queue-button .dashicons {
+    margin-right: 5px;
+}
+
+.qpfp-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.qpfp-button {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.qpfp-calendar {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.qpfp-calendar-month {
+    margin-bottom: 40px;
+    padding: 20px;
+}
+
+.qpfp-calendar-month h2 {
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f1;
+    color: #1d2327;
+    font-size: 1.3em;
+}
+
+.qpfp-calendar-month table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    background: #fff;
+    table-layout: fixed;
+}
+
+.qpfp-calendar-month th,
+.qpfp-calendar-day {
+    width: 14.28%; /* 100% / 7 days */
+    min-width: 120px;
+    max-width: 200px;
+}
+
+.qpfp-calendar-month th {
+    background: #f6f7f7;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    color: #50575e;
+    border: 1px solid #e5e7eb;
+    font-size: 13px;
+}
+
+.qpfp-calendar-day {
+    min-height: 120px;
+    padding: 8px;
+    vertical-align: top;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    overflow: hidden;
+}
+
+.qpfp-calendar-day.empty {
+    background: #f9f9f9;
+}
+
+.qpfp-calendar-day.has-posts {
+    background: #f0f6fc;
+}
+
+.day-number {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1d2327;
+    font-size: 0.9em;
+    padding: 2px 4px;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+.scheduled-posts {
+    font-size: 12px;
+    overflow-y: auto;
+    max-height: calc(100% - 30px); /* Account for day number */
+}
+
+.scheduled-post {
+    margin-bottom: 6px;
+    padding: 6px 8px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    word-break: break-word;
+}
+
+.scheduled-post:hover {
+    border-color: #2271b1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.scheduled-post:last-child {
+    margin-bottom: 0;
+}
+
+.scheduled-post a {
+    display: block;
+    text-decoration: none;
+    color: #2271b1;
+    margin-bottom: 3px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.scheduled-post a:hover {
+    color: #135e96;
+}
+
+.post-meta {
+    color: #646970;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* Queue dropdown styles */
+#qpfp-queue-dropdown {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.qpfp-dropdown-content {
+    max-width: 300px;
+}
+
+.qpfp-dropdown-content h4 {
+    margin: 0 0 10px 0;
+}
+
+.qpfp-dropdown-content select {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.qpfp-dropdown-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.qpfp-dropdown-actions button {
+    flex: 1;
+} 
