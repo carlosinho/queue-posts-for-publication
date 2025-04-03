@@ -2,8 +2,8 @@
     const { registerPlugin } = wp.plugins;
     const { PluginPostStatusInfo } = wp.editPost;
     const { Button, SelectControl } = wp.components;
-    const { createElement, useState } = wp.element;
-    const { useSelect, useDispatch } = wp.data;
+    const { createElement, useState, useEffect } = wp.element;
+    const { useSelect, useDispatch, subscribe } = wp.data;
     const apiFetch = wp.apiFetch;
 
     // Configure apiFetch with the REST nonce
@@ -16,18 +16,39 @@
         const [selectedSlot, setSelectedSlot] = useState('');
         const [isLoading, setIsLoading] = useState(false);
         const [availableSlots, setAvailableSlots] = useState([]);
+        const [isScheduled, setIsScheduled] = useState(false);
 
-        const { getCurrentPost, getCurrentPostId } = useSelect(select => ({
+        const { getCurrentPost, getCurrentPostId, getPostStatus } = useSelect(select => ({
             getCurrentPost: () => select('core/editor').getCurrentPost(),
-            getCurrentPostId: () => select('core/editor').getCurrentPostId()
+            getCurrentPostId: () => select('core/editor').getCurrentPostId(),
+            getPostStatus: () => select('core/editor').getEditedPostAttribute('status')
         }), []);
 
         const { savePost } = useDispatch('core/editor');
 
-        const postStatus = getCurrentPost()?.status;
+        // Watch for post status changes using subscribe
+        useEffect(() => {
+            const unsubscribe = subscribe(() => {
+                const status = getPostStatus();
+                if (status === 'publish' || status === 'future') {
+                    setIsScheduled(true);
+                }
+            });
+
+            // Cleanup subscription on unmount
+            return () => unsubscribe();
+        }, [getPostStatus]);
+
+        // Initialize isScheduled based on current status
+        useEffect(() => {
+            const status = getPostStatus();
+            if (status === 'publish' || status === 'future') {
+                setIsScheduled(true);
+            }
+        }, [getPostStatus]);
 
         // Don't show for published or scheduled posts
-        if (postStatus === 'publish' || postStatus === 'future') {
+        if (getCurrentPost()?.status === 'publish' || getCurrentPost()?.status === 'future') {
             return null;
         }
 
@@ -48,6 +69,7 @@
 
                 if (response.success) {
                     alert(qpfpBlockEditor.i18n.queueSuccess.replace('%s', response.scheduled_time));
+                    setIsScheduled(true);
                     savePost();
                 }
             } catch (error) {
@@ -96,6 +118,7 @@
 
                 if (response.success) {
                     alert(qpfpBlockEditor.i18n.queueSuccess.replace('%s', response.scheduled_time));
+                    setIsScheduled(true);
                     savePost();
                 }
             } catch (error) {
@@ -209,7 +232,8 @@
                 {
                     isPrimary: true,
                     onClick: function() { setShowOptions(true); },
-                    className: 'qpfp-button qpfp-button-primary'
+                    className: 'qpfp-button qpfp-button-primary',
+                    disabled: isScheduled
                 },
                 qpfpBlockEditor.i18n.queueButton
             )
