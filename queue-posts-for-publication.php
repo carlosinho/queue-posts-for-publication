@@ -3,7 +3,7 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.0.3
+ * Version: 1.0.0
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -76,7 +76,6 @@ class Queue_Posts_For_Publication {
         register_deactivation_hook(__FILE__, array($this, 'deactivate'));
         
         // Post editor hooks
-        add_action('post_submitbox_misc_actions', array($this, 'add_queue_button')); // Classic editor
         add_action('admin_footer', array($this, 'render_queue_dropdown'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
         
@@ -85,6 +84,10 @@ class Queue_Posts_For_Publication {
         
         // Add filter to prevent post lock corruption
         add_filter('wp_check_post_lock', array($this, 'prevent_post_lock_corruption'), 10, 2);
+
+        // Add AJAX handlers for classic editor
+        add_action('wp_ajax_qpfp_get_slots', array($this, 'handle_get_slots_ajax'));
+        add_action('wp_ajax_qpfp_queue_post', array($this, 'handle_queue_post_ajax'));
     }
 
     /**
@@ -583,31 +586,6 @@ class Queue_Posts_For_Publication {
     }
 
     /**
-     * Add queue button to publish box.
-     */
-    public function add_queue_button($post) {
-        if ($post->post_status === 'publish' || $post->post_status === 'future') {
-            return;
-        }
-
-        global $wpdb;
-        $slots = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}qpfp_publication_slots ORDER BY day_of_week, time_of_day");
-        
-        if (empty($slots)) {
-            return;
-        }
-
-        ?>
-        <div class="misc-pub-section">
-            <button type="button" class="button button-secondary" id="qpfp-queue-button">
-                <span class="dashicons dashicons-arrow-down-alt2" style="vertical-align: middle;"></span>
-                <?php echo esc_html__('Queue for publication', 'queue-posts-for-publication'); ?>
-            </button>
-        </div>
-        <?php
-    }
-
-    /**
      * Render queue dropdown in footer.
      */
     public function render_queue_dropdown() {
@@ -726,35 +704,68 @@ class Queue_Posts_For_Publication {
      * Enqueue admin assets.
      */
     public function enqueue_admin_assets($hook) {
-        // Load on post edit screens and queue list page
-        if (!in_array($hook, array('post.php', 'post-new.php', 'queue-posts_page_queue-posts-list'))) {
-            return;
+        // Load admin.js only on post edit screens
+        if (in_array($hook, array('post.php', 'post-new.php'))) {
+            wp_enqueue_style(
+                'qpfp-admin',
+                QPFP_PLUGIN_URL . 'admin.css',
+                array(),
+                QPFP_VERSION
+            );
+
+            wp_enqueue_script(
+                'qpfp-admin',
+                QPFP_PLUGIN_URL . 'admin.js',
+                array('jquery'),
+                QPFP_VERSION,
+                true
+            );
+
+            wp_localize_script('qpfp-admin', 'qpfpAdmin', array(
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('qpfp-queue-nonce'),
+                'i18n' => array(
+                    'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
+                    'queueSuccess' => __('Post queued successfully.', 'queue-posts-for-publication'),
+                    'queueError' => __('Failed to queue post.', 'queue-posts-for-publication')
+                )
+            ));
         }
 
-        wp_enqueue_style(
-            'qpfp-admin',
-            QPFP_PLUGIN_URL . 'admin.css',
-            array(),
-            QPFP_VERSION
-        );
+        // Load calendar-view.js only on the queue list page
+        if ($hook === 'queue-posts_page_queue-posts-list') {
+            wp_enqueue_style(
+                'qpfp-admin',
+                QPFP_PLUGIN_URL . 'admin.css',
+                array(),
+                QPFP_VERSION
+            );
 
-        wp_enqueue_script(
-            'qpfp-admin',
-            QPFP_PLUGIN_URL . 'admin.js',
-            array('jquery'),
-            QPFP_VERSION,
-            true
-        );
+            wp_enqueue_script(
+                'qpfp-calendar-view',
+                QPFP_PLUGIN_URL . 'calendar-view.js',
+                array('jquery'),
+                QPFP_VERSION,
+                true
+            );
 
-        wp_localize_script('qpfp-admin', 'qpfpAdmin', array(
-            'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('qpfp-queue-nonce'),
-            'i18n' => array(
-                'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
-                'queueSuccess' => __('Post queued successfully.', 'queue-posts-for-publication'),
-                'queueError' => __('Failed to queue post.', 'queue-posts-for-publication')
-            )
-        ));
+            wp_localize_script('qpfp-calendar-view', 'qpfpAdmin', array(
+                'i18n' => array(
+                    'showListView' => __('Show List View', 'queue-posts-for-publication'),
+                    'showCalendarView' => __('Show Calendar View', 'queue-posts-for-publication')
+                )
+            ));
+        }
+
+        // Load only admin.css on slots page since no JS is needed
+        if ($hook === 'queue-posts_page_queue-posts-slots') {
+            wp_enqueue_style(
+                'qpfp-admin',
+                QPFP_PLUGIN_URL . 'admin.css',
+                array(),
+                QPFP_VERSION
+            );
+        }
     }
 
     /**
@@ -805,8 +816,18 @@ class Queue_Posts_For_Publication {
         $end_month = date('n', $last_post_date);
         $end_year = date('Y', $last_post_date);
 
+        // Get current date for highlighting
+        $current_date = current_time('Y-m-d');
+
         echo '<div class="wrap">';
         echo '<h1>' . esc_html__('Scheduled Posts', 'queue-posts-for-publication') . '</h1>';
+        
+        // Add view toggle button
+        echo '<div class="qpfp-view-toggle">';
+        echo '<button type="button" class="button" id="qpfp-toggle-view">' . esc_html__('Toggle View', 'queue-posts-for-publication') . '</button>';
+        echo '</div>';
+
+        // Calendar View
         echo '<div class="qpfp-calendar">';
 
         // Display calendar for each month from first post to last post
@@ -833,7 +854,7 @@ class Queue_Posts_For_Publication {
                 }
 
                 echo '<div class="qpfp-calendar-month">';
-                echo '<h2>' . esc_html($month_name) . '</h2>';
+                echo '<h3>' . esc_html($month_name) . '</h3>';
                 echo '<table>';
                 echo '<tr>';
                 foreach ($days_of_week as $day) {
@@ -851,10 +872,23 @@ class Queue_Posts_For_Publication {
                 for ($day = 1; $day <= $last_day; $day++) {
                     $date_key = date('Y-m-d', mktime(0, 0, 0, $month, $day, $year));
                     $has_posts = isset($posts_by_date[$date_key]);
-                    $day_class = $has_posts ? 'has-posts' : 'empty';
-
-                    echo '<td class="qpfp-calendar-day ' . esc_attr($day_class) . '">';
+                    $is_current_day = ($date_key === $current_date);
+                    
+                    $day_classes = array('qpfp-calendar-day');
+                    if (!$has_posts) $day_classes[] = 'empty';
+                    if ($has_posts) $day_classes[] = 'has-posts';
+                    if ($is_current_day) {
+                        $day_classes[] = 'current-day';
+                        $today_emojis = array('⏰', '📌', '☀️', '🫵');
+                        $random_emoji = $today_emojis[array_rand($today_emojis)];
+                        $emoji_html = '<div class="today-emoji">' . esc_html($random_emoji) . '</div>';
+                    } else {
+                        $emoji_html = '';
+                    }
+                    
+                    echo '<td class="' . esc_attr(implode(' ', $day_classes)) . '">';
                     echo '<div class="day-number">' . esc_html($day) . '</div>';
+                    echo $emoji_html;
                     
                     if ($has_posts) {
                         echo '<div class="scheduled-posts">';
@@ -888,8 +922,45 @@ class Queue_Posts_For_Publication {
             }
         }
 
-        echo '</div>';
-        echo '</div>';
+        echo '</div>'; // End calendar view
+
+        // List View
+        echo '<div class="qpfp-list-view">';
+        $current_month = '';
+        
+        foreach ($posts_by_date as $date => $day_posts) {
+            $month = date_i18n('F Y', strtotime($date));
+            
+            if ($month !== $current_month) {
+                if ($current_month !== '') {
+                    echo '</div>'; // Close previous month
+                }
+                echo '<div class="qpfp-list-month">';
+                echo '<h3>' . esc_html($month) . '</h3>';
+                $current_month = $month;
+            }
+            
+            echo '<div class="qpfp-list-day">';
+            echo '<div class="qpfp-list-date">' . esc_html(date_i18n(get_option('date_format'), strtotime($date))) . '</div>';
+            echo '<div class="qpfp-list-posts">';
+            
+            foreach ($day_posts as $post) {
+                echo '<div class="qpfp-list-post">';
+                echo '<a href="' . get_edit_post_link($post->ID) . '">' . esc_html($post->post_title) . '</a>';
+                echo '<div class="qpfp-list-time">' . esc_html(date_i18n(get_option('time_format'), strtotime($post->post_date))) . '</div>';
+                echo '</div>';
+            }
+            
+            echo '</div>'; // End list-posts
+            echo '</div>'; // End list-day
+        }
+        
+        if ($current_month !== '') {
+            echo '</div>'; // Close last month
+        }
+        
+        echo '</div>'; // End list view
+        echo '</div>'; // End wrap
     }
 
     /**
@@ -1035,6 +1106,143 @@ class Queue_Posts_For_Publication {
             'success' => true,
             'scheduled_time' => date(get_option('date_format') . ' ' . get_option('time_format'), $selected_slot['timestamp'])
         ), 200);
+    }
+
+    /**
+     * Handle AJAX request to get available slots. For classic editor.
+     */
+    public function handle_get_slots_ajax() {
+        check_ajax_referer('qpfp-queue-nonce', '_ajax_nonce');
+
+        if (!current_user_can('edit_posts')) {
+            wp_send_json_error('Permission denied');
+            return;
+        }
+
+        $available_slots = $this->get_available_slots(10);
+        
+        if (empty($available_slots)) {
+            wp_send_json_success(array()); // Match REST behavior
+            return;
+        }
+
+        $date_format = get_option('date_format');
+        $time_format = get_option('time_format');
+        $days = array(
+            1 => __('Monday', 'queue-posts-for-publication'),
+            2 => __('Tuesday', 'queue-posts-for-publication'),
+            3 => __('Wednesday', 'queue-posts-for-publication'),
+            4 => __('Thursday', 'queue-posts-for-publication'),
+            5 => __('Friday', 'queue-posts-for-publication'),
+            6 => __('Saturday', 'queue-posts-for-publication'),
+            7 => __('Sunday', 'queue-posts-for-publication')
+        );
+        
+        $formatted_slots = array_map(function($slot_info) use ($date_format, $time_format, $days) {
+            $day_of_week = date('N', $slot_info['timestamp']);
+            $day_name = $days[$day_of_week];
+            return array(
+                'id' => $slot_info['id'],
+                'label' => date($date_format . ' ' . $time_format, $slot_info['timestamp']) . ' (' . $day_name . ')'
+            );
+        }, $available_slots);
+
+        wp_send_json_success($formatted_slots);
+    }
+
+    /**
+     * Handle AJAX request to queue a post. For classic editor.
+     */
+    public function handle_queue_post_ajax() {
+        check_ajax_referer('qpfp-queue-nonce', '_ajax_nonce');
+
+        if (!current_user_can('edit_posts')) {
+            wp_send_json_error('Permission denied');
+            return;
+        }
+
+        $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+        $slot_id = isset($_POST['slot_id']) ? $_POST['slot_id'] : null;
+
+        if (!$post_id) {
+            wp_send_json_error('Invalid post ID');
+            return;
+        }
+
+        // Get available slots
+        $available_slots = $this->get_available_slots($slot_id ? 10 : 1);
+        
+        // Get the selected slot
+        $selected_slot = null;
+        if ($slot_id) {
+            foreach ($available_slots as $slot) {
+                if ($slot['id'] == $slot_id) {
+                    $selected_slot = $slot;
+                    break;
+                }
+            }
+        } else {
+            $selected_slot = $available_slots[0];
+        }
+
+        if (!$selected_slot) {
+            wp_send_json_error('Selected slot not available');
+            return;
+        }
+
+        // Get the post
+        $post = get_post($post_id);
+        if (!$post) {
+            wp_send_json_error(__('Invalid post ID.', 'queue-posts-for-publication'));
+            return;
+        }
+
+        // Get current timestamp in site's timezone
+        $current_time = current_time('timestamp');
+        
+        // Debug log the timestamps
+        $this->qpfp_log('Current time: ' . date('Y-m-d H:i:s', $current_time));
+        $this->qpfp_log('Slot timestamp: ' . date('Y-m-d H:i:s', $selected_slot['timestamp']));
+        
+        // Get the local datetime string (timestamp is already in site's timezone)
+        $local_datetime = date('Y-m-d H:i:s', $selected_slot['timestamp']);
+        $this->qpfp_log('Local datetime: ' . $local_datetime);
+        
+        // Convert local datetime to GMT datetime
+        $gmt_datetime = get_gmt_from_date($local_datetime);
+
+        // Prepare post data
+        $post_data = array(
+            'ID' => $post_id,
+            'post_status' => 'future',
+            'post_date' => $local_datetime,
+            'post_date_gmt' => $gmt_datetime,
+            'post_title' => $post->post_title,
+            'post_content' => $post->post_content,
+            'post_excerpt' => $post->post_excerpt
+        );
+        
+        // Temporarily remove filters that might interfere with post status
+        remove_all_filters('wp_insert_post_data');
+        remove_all_filters('wp_insert_post');
+        
+        // Update the post
+        $update_result = wp_insert_post($post_data, true);
+        
+        // Restore filters
+        add_filter('wp_insert_post_data', 'wp_filter_post_data');
+        add_filter('wp_insert_post', 'wp_insert_post');
+
+        if (is_wp_error($update_result)) {
+            $this->qpfp_log('Failed to schedule post: ' . $update_result->get_error_message());
+            wp_send_json_error($update_result->get_error_message());
+            return;
+        }
+
+        wp_send_json_success(array(
+            'success' => true,
+            'scheduled_time' => date(get_option('date_format') . ' ' . get_option('time_format'), $selected_slot['timestamp'])
+        ));
     }
 }
 

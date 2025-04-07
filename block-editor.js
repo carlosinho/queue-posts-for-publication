@@ -165,7 +165,7 @@
                             onClick: handleConfirmSlot,
                             disabled: !selectedSlot || isLoading,
                             isBusy: isLoading,
-                            className: 'qpfp-button qpfp-button-primary'
+                            className: 'block-qpfp-button block-qpfp-button-primary'
                         },
                         qpfpBlockEditor.i18n.queue
                     ),
@@ -174,7 +174,7 @@
                         {
                             isSecondary: true,
                             onClick: handleCancel,
-                            className: 'qpfp-button qpfp-button-cancel'
+                            className: 'block-qpfp-button block-qpfp-button-cancel'
                         },
                         qpfpBlockEditor.i18n.cancel
                     )
@@ -196,7 +196,7 @@
                             onClick: handleQueueNext,
                             disabled: isLoading,
                             isBusy: isLoading,
-                            className: 'qpfp-button qpfp-button-primary'
+                            className: 'block-qpfp-button block-qpfp-button-primary'
                         },
                         qpfpBlockEditor.i18n.queueForNext
                     ),
@@ -207,7 +207,7 @@
                             onClick: handlePickSlot,
                             disabled: isLoading,
                             isBusy: isLoading,
-                            className: 'qpfp-button qpfp-button-primary'
+                            className: 'block-qpfp-button block-qpfp-button-primary'
                         },
                         qpfpBlockEditor.i18n.pickSlot
                     ),
@@ -216,7 +216,7 @@
                         {
                             isSecondary: true,
                             onClick: handleCancel,
-                            className: 'qpfp-button qpfp-button-cancel'
+                            className: 'block-qpfp-button block-qpfp-button-cancel'
                         },
                         qpfpBlockEditor.i18n.cancel
                     )
@@ -232,7 +232,7 @@
                 {
                     isPrimary: true,
                     onClick: function() { setShowOptions(true); },
-                    className: 'qpfp-button qpfp-button-primary',
+                    className: 'block-qpfp-button block-qpfp-button-primary',
                     disabled: isScheduled
                 },
                 qpfpBlockEditor.i18n.queueButton

@@ -1,44 +1,5 @@
-/* Classic editor styles */
-#qpfp-queue-dropdown {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.qpfp-dropdown-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    width: 90%;
-}
-
-.qpfp-dropdown-content h4 {
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-
-.qpfp-dropdown-content select {
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-.qpfp-dropdown-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* Block editor styles */
-.queue-posts-panel {
+/* Block Editor Styles */
+.block-queue-posts-panel {
     margin-top: 20px;
 }
 
@@ -78,9 +39,17 @@
     box-sizing: border-box;
 }
 
-.qpfp-button {
+.block-qpfp-button {
     width: 100%;
     box-sizing: border-box;
+}
+
+.block-qpfp-button.block-qpfp-button-primary {
+    margin: 0;
+}
+
+.block-qpfp-button.block-qpfp-button-cancel {
+    margin: 0;
 }
 
 .qpfp-calendar {
@@ -90,20 +59,31 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.qpfp-calendar-month {
-    margin-bottom: 40px;
-    padding: 20px;
+.qpfp-calendar.list-active {
+    display: none;
 }
 
-.qpfp-calendar-month h2 {
-    margin: 0 0 20px 0;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f1;
-    color: #1d2327;
-    font-size: 1.3em;
+.qpfp-calendar-month {
+    margin-bottom: 0px;
+    background: #fff;
+    position: relative;
+}
+
+.qpfp-calendar-month:last-child {
+    margin-bottom: 0;
+}
+
+.qpfp-calendar-month h3 {
+    margin: 0;
+    padding: 15px;
+    background: #f6f7f7;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 1.1em;
 }
 
 .qpfp-calendar-month table {
+    padding: 20px;
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
@@ -119,17 +99,18 @@
 }
 
 .qpfp-calendar-month th {
-    background: #f6f7f7;
+    background: #f0f6fc;
     padding: 12px 8px;
     text-align: center;
     font-weight: 600;
-    color: #50575e;
+    color: #2271b1;
     border: 1px solid #e5e7eb;
     font-size: 13px;
 }
 
 .qpfp-calendar-day {
-    min-height: 120px;
+    height: 150px;
+    min-height: 150px;
     padding: 8px;
     vertical-align: top;
     background: #fff;
@@ -139,7 +120,25 @@
 }
 
 .qpfp-calendar-day.empty {
-    background: #f9f9f9;
+    background: #fff;
+    height: 150px;
+    min-height: 150px;
+}
+
+.qpfp-calendar-day.current-day {
+    background: #fffde7;
+    border: 2px solid #2271b1;
+}
+
+.today-emoji {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .qpfp-calendar-day.has-posts {
@@ -234,4 +233,230 @@
 
 .qpfp-dropdown-actions button {
     flex: 1;
+}
+
+/* Classic Editor Queue Interface */
+body.wp-admin.post-php #qpfp-queue-button,
+body.wp-admin.post-new-php #qpfp-queue-button {
+    position: relative;
+    padding-right: 24px;
+    display: inline-flex;
+    align-items: center;
+}
+
+body.wp-admin.post-php #qpfp-queue-button:after,
+body.wp-admin.post-new-php #qpfp-queue-button:after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid currentColor;
+    transform: translateY(-50%);
+}
+
+body.wp-admin.post-php #qpfp-queue-button.loading:after,
+body.wp-admin.post-new-php #qpfp-queue-button.loading:after {
+    content: "";
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    animation: qpfp-spin 1s linear infinite;
+}
+
+body.wp-admin.post-php #qpfp-queue-dropdown,
+body.wp-admin.post-new-php #qpfp-queue-dropdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.wp-admin.post-php .qpfp-dropdown-content,
+body.wp-admin.post-new-php .qpfp-dropdown-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+}
+
+body.wp-admin.post-php .qpfp-options-panel,
+body.wp-admin.post-new-php .qpfp-options-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.wp-admin.post-php .qpfp-slot-panel,
+body.wp-admin.post-new-php .qpfp-slot-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+body.wp-admin.post-php .qpfp-slot-select,
+body.wp-admin.post-new-php .qpfp-slot-select {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+body.wp-admin.post-php .qpfp-actions,
+body.wp-admin.post-new-php .qpfp-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+body.wp-admin.post-php .qpfp-queue-next,
+body.wp-admin.post-php .qpfp-pick-slot,
+body.wp-admin.post-new-php .qpfp-queue-next,
+body.wp-admin.post-new-php .qpfp-pick-slot {
+    width: 100%;
+    text-align: center;
+    margin: 4px 0;
+}
+
+/* Dark Mode Support for Classic Editor */
+body.wp-admin.admin-color-dark .qpfp-dropdown-content {
+    background: #32373c;
+    border-color: #191f25;
+    color: #fff;
+}
+
+/* Animation for Classic Editor */
+@keyframes qpfp-spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Mobile Responsiveness for Classic Editor */
+@media screen and (max-width: 782px) {
+    body.wp-admin.post-php .qpfp-dropdown-content,
+    body.wp-admin.post-new-php .qpfp-dropdown-content {
+        width: calc(100% - 40px);
+        max-width: 320px;
+        margin: 20px;
+    }
+}
+
+/* Classic Editor Queue Interface */
+.misc-pub-queue .dashicons {
+    color: #646970;
+    margin-right: 5px;
+}
+
+.misc-pub-queue label {
+    color: #646970;
+}
+
+.misc-pub-queue .post-status-display {
+    font-weight: 600;
+}
+
+.misc-pub-queue .edit-qpfp-queue {
+    margin-left: 4px;
+}
+
+#qpfp-queue-select {
+    margin-top: 8px;
+}
+
+.qpfp-queue-options,
+.qpfp-slot-options > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.qpfp-slot-options {
+    margin-top: 8px;
+}
+
+.qpfp-slot-select {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+/* Mobile List View */
+.qpfp-list-view {
+    display: none;
+    margin-top: 20px;
+}
+
+.qpfp-list-view.active {
+    display: block;
+}
+
+.qpfp-list-month {
+    margin-bottom: 30px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+}
+
+.qpfp-list-month h3 {
+    margin: 0;
+    padding: 15px;
+    background: #f6f7f7;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 1.1em;
+}
+
+.qpfp-list-day {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.qpfp-list-day:last-child {
+    border-bottom: none;
+}
+
+.qpfp-list-date {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #1d2327;
+}
+
+.qpfp-list-posts {
+    margin-left: 15px;
+}
+
+.qpfp-list-post {
+    margin-bottom: 8px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 3px;
+}
+
+.qpfp-list-post:last-child {
+    margin-bottom: 0;
+}
+
+.qpfp-list-post a {
+    text-decoration: none;
+    color: #2271b1;
+    font-weight: 500;
+}
+
+.qpfp-list-time {
+    color: #646970;
+    font-size: 12px;
+    margin-top: 4px;
 } 
