@@ -18,7 +18,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('QPFP_VERSION', '0.0.3');
+define('QPFP_VERSION', '1.0.0');
 define('QPFP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('QPFP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
