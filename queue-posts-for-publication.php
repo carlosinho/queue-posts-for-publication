@@ -307,13 +307,13 @@ class Queue_Posts_For_Publication {
      */
     private function get_day_name($day_number) {
         $days = array(
-            1 => 'Monday',
-            2 => 'Tuesday',
-            3 => 'Wednesday',
-            4 => 'Thursday',
-            5 => 'Friday',
-            6 => 'Saturday',
-            7 => 'Sunday'
+            1 => __('Monday', 'queue-posts-for-publication'),
+            2 => __('Tuesday', 'queue-posts-for-publication'),
+            3 => __('Wednesday', 'queue-posts-for-publication'),
+            4 => __('Thursday', 'queue-posts-for-publication'),
+            5 => __('Friday', 'queue-posts-for-publication'),
+            6 => __('Saturday', 'queue-posts-for-publication'),
+            7 => __('Sunday', 'queue-posts-for-publication')
         );
         return $days[$day_number];
     }
@@ -505,6 +505,7 @@ class Queue_Posts_For_Publication {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_db_error',
+                /* translators: %s: Database error message */
                 sprintf(__('Failed to add slot. Error: %s', 'queue-posts-for-publication'), $wpdb->last_error),
                 'error'
             );
@@ -654,7 +655,7 @@ class Queue_Posts_For_Publication {
         // Register and enqueue the script
         wp_register_script(
             'qpfp-block-editor',
-            QPFP_PLUGIN_URL . 'block-editor.js',
+            QPFP_PLUGIN_URL . 'js/block-editor.js',
             array(
                 'wp-plugins',
                 'wp-edit-post',
@@ -685,9 +686,9 @@ class Queue_Posts_For_Publication {
                 'queue' => __('Queue', 'queue-posts-for-publication'),
                 'cancel' => __('Cancel', 'queue-posts-for-publication'),
                 'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
-                'queueSuccess' => __('Post scheduled for %s', 'queue-posts-for-publication'),
+                'queueSuccess' => /* translators: %s: Scheduled date and time */ __('Post scheduled for %s', 'queue-posts-for-publication'),
                 'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
-                'slotConflict' => __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'queue-posts-for-publication'),
+                'slotConflict' => /* translators: %s: Title of the post currently scheduled in this slot */ __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'queue-posts-for-publication'),
                 'noSlots' => __('No publication slots configured.', 'queue-posts-for-publication'),
                 'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
                 'pickSlot' => __('Pick a slot', 'queue-posts-for-publication')
@@ -708,14 +709,14 @@ class Queue_Posts_For_Publication {
         if (in_array($hook, array('post.php', 'post-new.php'))) {
             wp_enqueue_style(
                 'qpfp-admin',
-                QPFP_PLUGIN_URL . 'admin.css',
+                QPFP_PLUGIN_URL . 'css/admin.css',
                 array(),
                 QPFP_VERSION
             );
 
             wp_enqueue_script(
                 'qpfp-admin',
-                QPFP_PLUGIN_URL . 'admin.js',
+                QPFP_PLUGIN_URL . 'js/admin.js',
                 array('jquery'),
                 QPFP_VERSION,
                 true
@@ -727,7 +728,13 @@ class Queue_Posts_For_Publication {
                 'i18n' => array(
                     'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
                     'queueSuccess' => __('Post queued successfully.', 'queue-posts-for-publication'),
-                    'queueError' => __('Failed to queue post.', 'queue-posts-for-publication')
+                    'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
+                    'noSlots' => __('No slots available.', 'queue-posts-for-publication'),
+                    'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),
+                    'pickSlot' => __('Pick a slot', 'queue-posts-for-publication'),
+                    'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
+                    'showListView' => __('Show List View', 'queue-posts-for-publication'),
+                    'showCalendarView' => __('Show Calendar View', 'queue-posts-for-publication')
                 )
             ));
         }
@@ -736,14 +743,14 @@ class Queue_Posts_For_Publication {
         if ($hook === 'queue-posts_page_queue-posts-list') {
             wp_enqueue_style(
                 'qpfp-admin',
-                QPFP_PLUGIN_URL . 'admin.css',
+                QPFP_PLUGIN_URL . 'css/admin.css',
                 array(),
                 QPFP_VERSION
             );
 
             wp_enqueue_script(
                 'qpfp-calendar-view',
-                QPFP_PLUGIN_URL . 'calendar-view.js',
+                QPFP_PLUGIN_URL . 'js/calendar-view.js',
                 array('jquery'),
                 QPFP_VERSION,
                 true
@@ -761,7 +768,7 @@ class Queue_Posts_For_Publication {
         if ($hook === 'queue-posts_page_queue-posts-slots') {
             wp_enqueue_style(
                 'qpfp-admin',
-                QPFP_PLUGIN_URL . 'admin.css',
+                QPFP_PLUGIN_URL . 'css/admin.css',
                 array(),
                 QPFP_VERSION
             );

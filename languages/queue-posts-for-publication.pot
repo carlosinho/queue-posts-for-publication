@@ -1,0 +1,275 @@
+# Copyright (C) 2025 Karol K
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Queue Posts for Publication 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/queue-posts-for-publication\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-04-08T17:10:14+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: queue-posts-for-publication\n"
+
+#. Plugin Name of the plugin
+#: queue-posts-for-publication.php
+msgid "Queue Posts for Publication"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: queue-posts-for-publication.php
+msgid "https://wpwork.shop/"
+msgstr ""
+
+#. Description of the plugin
+#: queue-posts-for-publication.php
+msgid "A plugin to queue and schedule posts for future publication on the next available slot."
+msgstr ""
+
+#. Author of the plugin
+#: queue-posts-for-publication.php
+msgid "Karol K"
+msgstr ""
+
+#: queue-posts-for-publication.php:310
+#: queue-posts-for-publication.php:395
+#: queue-posts-for-publication.php:608
+#: queue-posts-for-publication.php:1019
+#: queue-posts-for-publication.php:1140
+msgid "Monday"
+msgstr ""
+
+#: queue-posts-for-publication.php:311
+#: queue-posts-for-publication.php:396
+#: queue-posts-for-publication.php:609
+#: queue-posts-for-publication.php:1020
+#: queue-posts-for-publication.php:1141
+msgid "Tuesday"
+msgstr ""
+
+#: queue-posts-for-publication.php:312
+#: queue-posts-for-publication.php:397
+#: queue-posts-for-publication.php:610
+#: queue-posts-for-publication.php:1021
+#: queue-posts-for-publication.php:1142
+msgid "Wednesday"
+msgstr ""
+
+#: queue-posts-for-publication.php:313
+#: queue-posts-for-publication.php:398
+#: queue-posts-for-publication.php:611
+#: queue-posts-for-publication.php:1022
+#: queue-posts-for-publication.php:1143
+msgid "Thursday"
+msgstr ""
+
+#: queue-posts-for-publication.php:314
+#: queue-posts-for-publication.php:399
+#: queue-posts-for-publication.php:612
+#: queue-posts-for-publication.php:1023
+#: queue-posts-for-publication.php:1144
+msgid "Friday"
+msgstr ""
+
+#: queue-posts-for-publication.php:315
+#: queue-posts-for-publication.php:400
+#: queue-posts-for-publication.php:613
+#: queue-posts-for-publication.php:1024
+#: queue-posts-for-publication.php:1145
+msgid "Saturday"
+msgstr ""
+
+#: queue-posts-for-publication.php:316
+#: queue-posts-for-publication.php:401
+#: queue-posts-for-publication.php:614
+#: queue-posts-for-publication.php:1025
+#: queue-posts-for-publication.php:1146
+msgid "Sunday"
+msgstr ""
+
+#: queue-posts-for-publication.php:347
+#: queue-posts-for-publication.php:381
+#: queue-posts-for-publication.php:561
+#: queue-posts-for-publication.php:572
+#: queue-posts-for-publication.php:573
+msgid "Publication Slots"
+msgstr ""
+
+#: queue-posts-for-publication.php:357
+msgid "Configure your publication slots. Each slot represents a specific day and time when posts can be published."
+msgstr ""
+
+#: queue-posts-for-publication.php:389
+msgid "Add New Slot"
+msgstr ""
+
+#: queue-posts-for-publication.php:392
+msgid "Select Day"
+msgstr ""
+
+#: queue-posts-for-publication.php:409
+msgid "Add Slot"
+msgstr ""
+
+#: queue-posts-for-publication.php:415
+msgid "Current Slots"
+msgstr ""
+
+#: queue-posts-for-publication.php:417
+msgid "No publication slots configured yet."
+msgstr ""
+
+#: queue-posts-for-publication.php:422
+msgid "Day"
+msgstr ""
+
+#: queue-posts-for-publication.php:423
+msgid "Time"
+msgstr ""
+
+#: queue-posts-for-publication.php:424
+msgid "Actions"
+msgstr ""
+
+#: queue-posts-for-publication.php:442
+msgid "Delete"
+msgstr ""
+
+#: queue-posts-for-publication.php:442
+msgid "Are you sure you want to delete this slot?"
+msgstr ""
+
+#: queue-posts-for-publication.php:462
+msgid "Please select both day and time."
+msgstr ""
+
+#: queue-posts-for-publication.php:475
+msgid "Invalid day or time format."
+msgstr ""
+
+#. translators: %s: Database error message
+#: queue-posts-for-publication.php:509
+msgid "Failed to add slot. Error: %s"
+msgstr ""
+
+#: queue-posts-for-publication.php:516
+msgid "Slot added successfully."
+msgstr ""
+
+#: queue-posts-for-publication.php:543
+msgid "Failed to delete slot."
+msgstr ""
+
+#: queue-posts-for-publication.php:550
+msgid "Slot deleted successfully."
+msgstr ""
+
+#: queue-posts-for-publication.php:562
+msgid "Queue Posts"
+msgstr ""
+
+#: queue-posts-for-publication.php:581
+#: queue-posts-for-publication.php:582
+msgid "Queued Posts"
+msgstr ""
+
+#: queue-posts-for-publication.php:619
+#: queue-posts-for-publication.php:684
+msgid "Select Publication Slot"
+msgstr ""
+
+#: queue-posts-for-publication.php:621
+#: queue-posts-for-publication.php:685
+#: queue-posts-for-publication.php:733
+msgid "Choose a slot..."
+msgstr ""
+
+#: queue-posts-for-publication.php:633
+#: queue-posts-for-publication.php:686
+msgid "Queue"
+msgstr ""
+
+#: queue-posts-for-publication.php:636
+#: queue-posts-for-publication.php:687
+msgid "Cancel"
+msgstr ""
+
+#: queue-posts-for-publication.php:683
+msgid "Queue for publication"
+msgstr ""
+
+#: queue-posts-for-publication.php:688
+#: queue-posts-for-publication.php:729
+msgid "Are you sure you want to queue this post for publication?"
+msgstr ""
+
+#. translators: %s: Scheduled date and time
+#: queue-posts-for-publication.php:689
+msgid "Post scheduled for %s"
+msgstr ""
+
+#. translators: %s: Scheduled date and time
+#: queue-posts-for-publication.php:690
+#: queue-posts-for-publication.php:731
+msgid "Failed to queue post."
+msgstr ""
+
+#. translators: %s: Title of the post currently scheduled in this slot
+#: queue-posts-for-publication.php:691
+msgid "This slot is already taken by \"%s\". Do you want to reschedule that post and use this slot?"
+msgstr ""
+
+#. translators: %s: Title of the post currently scheduled in this slot
+#: queue-posts-for-publication.php:692
+msgid "No publication slots configured."
+msgstr ""
+
+#: queue-posts-for-publication.php:693
+#: queue-posts-for-publication.php:735
+msgid "Queue for next slot"
+msgstr ""
+
+#: queue-posts-for-publication.php:694
+#: queue-posts-for-publication.php:734
+msgid "Pick a slot"
+msgstr ""
+
+#: queue-posts-for-publication.php:730
+msgid "Post queued successfully."
+msgstr ""
+
+#: queue-posts-for-publication.php:732
+msgid "No slots available."
+msgstr ""
+
+#: queue-posts-for-publication.php:736
+#: queue-posts-for-publication.php:761
+msgid "Show List View"
+msgstr ""
+
+#: queue-posts-for-publication.php:737
+#: queue-posts-for-publication.php:762
+msgid "Show Calendar View"
+msgstr ""
+
+#: queue-posts-for-publication.php:799
+#: queue-posts-for-publication.php:830
+msgid "Scheduled Posts"
+msgstr ""
+
+#: queue-posts-for-publication.php:800
+msgid "No posts are currently scheduled for future publication."
+msgstr ""
+
+#: queue-posts-for-publication.php:834
+msgid "Toggle View"
+msgstr ""
+
+#: queue-posts-for-publication.php:1068
+#: queue-posts-for-publication.php:1204
+msgid "Invalid post ID."
+msgstr ""
