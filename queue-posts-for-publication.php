@@ -877,14 +877,15 @@ class Queue_Posts_For_Publication {
                     $day_classes = array('qpfp-calendar-day');
                     if (!$has_posts) $day_classes[] = 'empty';
                     if ($has_posts) $day_classes[] = 'has-posts';
+                    $emoji_html = '';
                     if ($is_current_day) {
                         $day_classes[] = 'current-day';
-                        $today_emojis = array('⏰', '📌', '☀️', '🫵');
-                        $random_emoji = $today_emojis[array_rand($today_emojis)];
-                        $emoji_html = '<div class="today-emoji">' . esc_html($random_emoji) . '</div>';
-                    } else {
-                        $emoji_html = '';
-                    }
+                        if (!$has_posts) {
+                            $today_emojis = array('⏰', '📌', '☀️', '🫵');
+                            $random_emoji = $today_emojis[array_rand($today_emojis)];
+                            $emoji_html = '<div class="today-emoji">' . esc_html($random_emoji) . '</div>';
+                        }
+                    } 
                     
                     echo '<td class="' . esc_attr(implode(' ', $day_classes)) . '">';
                     echo '<div class="day-number">' . esc_html($day) . '</div>';
