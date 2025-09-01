@@ -2,14 +2,6 @@
 
 A WordPress plugin to queue and schedule posts for future publication on the next available slot.
 
-**Contributors**: karol-k  
-**Tags**: posts, scheduling, queue, publication, calendar  
-**Requires at least**: 5.0  
-**Tested up to**: 6.7.2  
-**Stable tag**: 0.10  
-**License**: GPL v2 or later  
-**License URI**: https://www.gnu.org/licenses/gpl-2.0.html
-
 ### Description
 
 Queue Posts for Publication lets you define publication slots (e.g., "Mon at 1 PM") and then queue posts to be published at the next available slot or at a specific future slot you select. It also provides a calendar view (and list view) of upcoming scheduled posts and integrates directly into the post editor for a smooth workflow.
