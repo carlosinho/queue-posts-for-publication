@@ -3,7 +3,7 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 1.0.0
+ * Version: 0.10
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -103,7 +103,7 @@ class Queue_Posts_For_Publication {
      */
     public function activate() {
         $this->create_tables();
-        //$this->cleanup_corrupted_locks(); // Used one time when the plugin corrupted a lot of posts by locking them for editing. This happened when in earlier versions we tried to save the publication date directly in the database vs using WordPress functions.
+        //$this->cleanup_corrupted_locks();
     }
 
     /**
@@ -120,10 +120,8 @@ class Queue_Posts_For_Publication {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
         // Publication slots table
-        $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}qpfp_publication_slots (
+        $sql = "CREATE TABLE {$wpdb->prefix}qpfp_publication_slots (
             id bigint(20) NOT NULL AUTO_INCREMENT,
             day_of_week tinyint(1) NOT NULL,
             time_of_day time NOT NULL,
@@ -131,10 +129,11 @@ class Queue_Posts_For_Publication {
             PRIMARY KEY  (id)
         ) $charset_collate;";
 
-        $wpdb->query($sql);
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        $result = dbDelta($sql);
 
-        if ($wpdb->last_error) {
-            $this->qpfp_log('Database table creation error: ' . $wpdb->last_error);
+        if (empty($result)) {
+            $this->qpfp_log('Database table creation failed: No SQL statements were executed');
         }
     }
 
@@ -151,6 +150,7 @@ class Queue_Posts_For_Publication {
 
     /**
      * Clean up corrupted post locks.
+     * This was a day-saving function needed at one time to clean up corrupted transients and post locks.
      */
     private function cleanup_corrupted_locks() {
         global $wpdb;
