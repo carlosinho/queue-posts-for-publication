@@ -2,8 +2,8 @@
 Contributors: karol-k
 Tags: posts, scheduling, queue, publication, calendar
 Requires at least: 5.0
-Tested up to: 6.7.2
-Stable tag: 0.10
+Tested up to: 6.9.4
+Stable tag: 0.11
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,10 +57,10 @@ If you delete a publication slot, that slot will no longer be used for any futur
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial release
+= 0.10 =
+* Proof of concept
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial release of Queue Posts for Publication. 
+= 0.10 =
+Proof of concept.

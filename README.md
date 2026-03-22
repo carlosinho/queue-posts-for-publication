@@ -1,60 +1,194 @@
-## Queue Posts for Publication
+# Queue Posts for Publication
 
-A WordPress plugin to queue and schedule posts for future publication on the next available slot.
+`Queue Posts for Publication` is a WordPress plugin that lets editors define a recurring weekly publishing cadence and then schedule posts into the next open slot without calculating dates manually.
 
-### Description
+It exists to solve a very specific workflow: keep using WordPress' native scheduled posts, but choose publish times from a reusable queue of weekly slots such as "Monday 13:00" or "Friday 09:30".
 
-Queue Posts for Publication lets you define publication slots (e.g., "Mon at 1 PM") and then queue posts to be published at the next available slot or at a specific future slot you select. It also provides a calendar view (and list view) of upcoming scheduled posts and integrates directly into the post editor for a smooth workflow.
+## What It Does Now
 
-### Features
+The current implementation provides:
 
-- Queue posts for the next available slot
-- Pick a specific slot for publication
-- Add/remove publication slots
-- Calendar view of scheduled posts
-- Support for both classic and block editor
-- Easy-to-use admin interface integrated into the post editing screen
+- A wp-admin screen for managing recurring publication slots
+- A queue action in the classic editor
+- A queue action in the block editor
+- A scheduled-post overview screen with calendar and list views
+- Internal REST and AJAX endpoints used by the editor UI
 
-### Installation
+The plugin does **not** create its own queue of post records. It stores slot definitions in one custom table and stores actual scheduled publication state in WordPress core `wp_posts` rows with `post_status = future`.
 
-1. Upload the plugin archive or install it from the official WordPress.org directory.
-2. Activate the plugin through the "Plugins" menu in WordPress.
-3. Go to "Queue Posts" from the wp-admin sidebar to configure your publication slots.
-4. Queue any post draft for publication.
+## Main User Flows
 
-### Usage
+### 1. Configure recurring slots
 
-1. Define your publication slots (e.g., multiple days/times each week).  
-2. From the post editor, queue your draft to the next available slot or choose a specific slot from the list.  
-3. Review upcoming scheduled posts in the calendar or list view.
+Open `Queue Posts -> Publication Slots` in wp-admin and add one or more weekly slots:
 
-### Frequently Asked Questions
+- day of week
+- time of day
 
-#### How do I add a new publication slot?
+Each row is a recurring pattern, not a one-off date.
 
-Go to "Queue Posts". Select the day of the week and time for the new slot, then click the "Add Slot" button.
+### 2. Queue a post from the editor
 
-#### Can I edit a queued post?
+On unscheduled, unpublished posts:
 
-Yes. You can edit a queued post at any time before it's published. The post will maintain its position in the queue. The plugin doesn't interfere with WordPress' native post publication or scheduling mechanisms.
+- Classic editor: a "Queue for publication" section is injected into the publish box
+- Block editor: a queue control is added through the post status panel
 
-#### What happens if I delete a publication slot?
+From there you can:
 
-If you delete a publication slot, that slot will no longer be used for future publications. All posts already scheduled at that slot will retain their existing schedule.
+- queue the post into the next available slot
+- pick one of the next available upcoming slots exposed by the plugin
 
-### Screenshots
+When queued, the plugin updates the post to:
 
-1. The main post scheduling section  
-2. Calendar view of scheduled posts  
-3. Settings page for configuring publication slots
+- `post_status = future`
+- `post_date = selected local site time`
+- `post_date_gmt = GMT equivalent`
 
-### Changelog
+After that, WordPress core handles publication in the normal scheduled-post way.
 
-#### 1.0.0
-- Initial release
+### 3. Review queued posts
 
-### License
+Open `Queue Posts -> Queued Posts` to see all future posts:
 
-This plugin is licensed under the GPL v2 or later. See the [GPL v2](https://www.gnu.org/licenses/gpl-2.0.html) for details.
+- calendar view on larger screens
+- list view toggle
+- mobile defaults to list view
 
+## Tech Stack
 
+- WordPress plugin, loaded from `queue-posts-for-publication.php`
+- PHP for all server-side logic
+- WordPress admin pages and hooks
+- `admin-ajax.php` for the classic editor flow
+- WordPress REST API for the block editor flow
+- jQuery for classic-editor and calendar interactions
+- WordPress block editor packages provided by core script handles
+- One custom database table: `{$wpdb->prefix}qpfp_publication_slots`
+- Translation support via `load_plugin_textdomain()` and `languages/queue-posts-for-publication.pot`
+
+There is no `composer.json`, `package.json`, build step, Docker setup, CI pipeline, or deployment automation in this repository.
+
+## Setup
+
+### Install
+
+Standard install process for WordPress plugins.
+
+### What activation creates
+
+On activation, the plugin creates:
+
+- `{$wpdb->prefix}qpfp_publication_slots`
+
+Schema:
+
+- `id bigint(20) auto_increment`
+- `day_of_week tinyint(1) not null`
+- `time_of_day time not null`
+- `created_at datetime not null default current_timestamp`
+
+### Environment variables
+
+The plugin does not define or require any plugin-specific environment variables.
+
+It relies on the host WordPress install for:
+
+- database credentials from WordPress configuration
+- site timezone/date/time settings
+- WordPress auth cookies and nonces
+
+### Site settings it uses
+
+The implementation reads these WordPress settings:
+
+- `date_format`
+- `time_format`
+- `start_of_week`
+
+It also registers these options:
+
+- `qpfp_publication_slots`
+- `qpfp_timezone`
+
+Those option names exist in code, but the active scheduling flow uses the custom table for slots. There is no working settings UI for these options in the current repository.
+
+## API And Integration Points
+
+These are internal plugin endpoints used by the editor UIs.
+
+### REST API
+
+- `GET /wp-json/wp/v2/qpfp/slots`
+- `POST /wp-json/wp/v2/qpfp/queue`
+
+`POST /wp-json/wp/v2/qpfp/queue` accepts:
+
+- `post_id` (required)
+- `slot_id` (optional)
+
+Permissions:
+
+- requires `current_user_can('edit_posts')`
+- uses the WordPress REST nonce localized into the block editor script
+
+### AJAX
+
+- `action=qpfp_get_slots`
+- `action=qpfp_queue_post`
+
+Permissions:
+
+- requires `current_user_can('edit_posts')`
+- requires AJAX nonce `qpfp-queue-nonce`
+
+### Admin screens
+
+- `admin.php?page=queue-posts-slots`
+- `admin.php?page=queue-posts-list`
+
+These menu pages require `manage_options`.
+
+## Project Structure
+
+```text
+queue-posts-for-publication/
+├── queue-posts-for-publication.php   # Plugin bootstrap, hooks, admin pages, REST, AJAX, slot logic
+├── css/
+│   └── admin.css                     # Admin/editor/calendar styling
+├── js/
+│   ├── admin.js                      # Classic editor queue UI
+│   ├── block-editor.js               # Block editor queue UI
+│   └── calendar-view.js              # Calendar/list toggle on queued-posts screen
+├── languages/
+│   └── queue-posts-for-publication.pot
+├── README.md
+└── readme.txt
+```
+
+## Troubleshooting
+
+- No queue button in the editor: the plugin hides queue controls for posts already `publish` or `future`.
+- No queue button in the classic editor: the script only loads on `post.php` and `post-new.php`.
+- A slot was deleted but queued posts stayed scheduled: this is expected. Deleting a recurring slot only affects future slot selection; existing `future` posts are not moved.
+- An editor can queue posts but cannot manage slots: this is expected. queueing requires `edit_posts`, but slot management pages require `manage_options`.
+- Looking for a settings page: `render_settings_page()` exists in code but is only a stub and is not the active configuration path.
+- Need to schedule far ahead in the same weekly slot: the current picker identifies choices by recurring slot ID, not by occurrence timestamp. In practice, later occurrences of the same weekly slot are not uniquely selectable.
+
+## Current Scope
+
+What exists now:
+
+- recurring weekly slot definitions
+- editor-side queue controls
+- scheduled-post overview
+- REST and AJAX scheduling endpoints
+- native WordPress scheduled publishing
+
+What does not exist in this repository:
+
+- a public frontend
+- a custom publish worker
+- automated tests
+- a real settings screen
+- conflict resolution or automatic reshuffling when a slot is already occupied
