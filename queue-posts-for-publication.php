@@ -1043,11 +1043,21 @@ class Queue_Posts_For_Publication {
     public function queue_post_rest($request) {
         $post_id = $request->get_param('post_id');
         $slot_id = $request->get_param('slot_id');
+        $no_slots_message = __('No publication slots configured.', 'queue-posts-for-publication');
+        $slot_unavailable_message = __('Selected slot not available.', 'queue-posts-for-publication');
         
         // Get available slots: 
         // if slot_id is provided get multiple slots to find the specific one,
         // otherwise just get the next available slot
         $available_slots = $this->get_available_slots($slot_id ? 10 : 1);
+
+        if (empty($available_slots)) {
+            return new WP_Error(
+                'no_slots_defined',
+                $no_slots_message,
+                array('status' => 409)
+            );
+        }
         
         // Get the selected slot
         $selected_slot = null;
@@ -1059,7 +1069,15 @@ class Queue_Posts_For_Publication {
                 }
             }
         } else {
-            $selected_slot = $available_slots[0];
+            $selected_slot = !empty($available_slots) ? $available_slots[0] : null;
+        }
+
+        if (!$selected_slot) {
+            return new WP_Error(
+                'slot_not_available',
+                $slot_unavailable_message,
+                array('status' => 409)
+            );
         }
         
         // Get the post
@@ -1171,6 +1189,8 @@ class Queue_Posts_For_Publication {
 
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
         $slot_id = isset($_POST['slot_id']) ? $_POST['slot_id'] : null;
+        $no_slots_message = __('No publication slots configured.', 'queue-posts-for-publication');
+        $slot_unavailable_message = __('Selected slot not available.', 'queue-posts-for-publication');
 
         if (!$post_id) {
             wp_send_json_error('Invalid post ID');
@@ -1179,6 +1199,11 @@ class Queue_Posts_For_Publication {
 
         // Get available slots
         $available_slots = $this->get_available_slots($slot_id ? 10 : 1);
+
+        if (empty($available_slots)) {
+            wp_send_json_error($no_slots_message);
+            return;
+        }
         
         // Get the selected slot
         $selected_slot = null;
@@ -1190,11 +1215,11 @@ class Queue_Posts_For_Publication {
                 }
             }
         } else {
-            $selected_slot = $available_slots[0];
+            $selected_slot = !empty($available_slots) ? $available_slots[0] : null;
         }
 
         if (!$selected_slot) {
-            wp_send_json_error('Selected slot not available');
+            wp_send_json_error($slot_unavailable_message);
             return;
         }
 

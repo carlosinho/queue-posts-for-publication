@@ -155,7 +155,7 @@ jQuery(document).ready(function($) {
             window.location.reload();
         } catch (error) {
             console.error('Failed to queue post:', error);
-            alert(qpfpAdmin.i18n.queueError || 'Failed to queue post.');
+            alert(error.message || qpfpAdmin.i18n.queueError || 'Failed to queue post.');
         } finally {
             isLoading = false;
             updateLoadingState();

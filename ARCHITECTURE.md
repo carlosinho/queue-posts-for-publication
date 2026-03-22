@@ -299,15 +299,11 @@ This architecture should be fine for modest numbers of future posts and recurrin
 
 The UI labels individual upcoming datetimes, but the submitted value is only `slot_id`. If the same weekly slot appears more than once in the next 10 available choices, later occurrences are not uniquely addressable. The backend will match the first available occurrence with that slot ID.
 
-2. REST queueing is less defensive than AJAX queueing.
-
-`queue_post_rest()` does not explicitly reject a missing selected slot before dereferencing it. The AJAX version does. In practice, this means the REST path is more brittle when no slot is available or a requested slot is not found in the exposed set.
-
-3. Conflict-handling text exists, but conflict reassignment does not.
+2. Conflict-handling text exists, but conflict reassignment does not.
 
 The block-editor localization includes a `slotConflict` message, but there is no implemented flow that reschedules an already-booked post to free a slot.
 
-4. Legacy or unused code is present.
+3. Legacy or unused code is present.
 
 Present but not wired into runtime behavior:
 

@@ -74,7 +74,7 @@
                 }
             } catch (error) {
                 console.error('Failed to queue post:', error);
-                alert(qpfpBlockEditor.i18n.queueError);
+                alert(error.message || qpfpBlockEditor.i18n.queueError);
             } finally {
                 setIsLoading(false);
                 setShowOptions(false);
@@ -123,7 +123,7 @@
                 }
             } catch (error) {
                 console.error('Failed to queue post:', error);
-                alert(qpfpBlockEditor.i18n.queueError);
+                alert(error.message || qpfpBlockEditor.i18n.queueError);
             } finally {
                 setIsLoading(false);
                 setShowSlots(false);
