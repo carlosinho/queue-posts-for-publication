@@ -131,10 +131,6 @@ jQuery(document).ready(function($) {
 
     // Helper function to queue post
     async function queuePost(slotId = null) {
-        if (!confirm(qpfpAdmin.i18n.confirmQueue || 'Are you sure you want to queue this post for publication?')) {
-            return;
-        }
-
         isLoading = true;
         updateLoadingState();
 
@@ -151,7 +147,6 @@ jQuery(document).ready(function($) {
                 throw new Error(response.data || 'Failed to queue post');
             }
 
-            alert((qpfpAdmin.i18n.queueSuccess || 'Post scheduled for %s').replace('%s', response.data.scheduled_time));
             window.location.reload();
         } catch (error) {
             console.error('Failed to queue post:', error);

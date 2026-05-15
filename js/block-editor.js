@@ -53,10 +53,6 @@
         }
 
         const handleQueueNext = async function() {
-            if (!confirm(qpfpBlockEditor.i18n.confirmQueue)) {
-                return;
-            }
-
             setIsLoading(true);
             try {
                 const response = await apiFetch({
@@ -68,7 +64,6 @@
                 });
 
                 if (response.success) {
-                    alert(qpfpBlockEditor.i18n.queueSuccess.replace('%s', response.scheduled_time));
                     setIsScheduled(true);
                     savePost();
                 }
@@ -117,7 +112,6 @@
                 });
 
                 if (response.success) {
-                    alert(qpfpBlockEditor.i18n.queueSuccess.replace('%s', response.scheduled_time));
                     setIsScheduled(true);
                     savePost();
                 }

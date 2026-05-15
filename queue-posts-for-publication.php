@@ -3,7 +3,7 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.12
+ * Version: 0.13
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -705,8 +705,6 @@ class Queue_Posts_For_Publication {
                 'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),
                 'queue' => __('Queue', 'queue-posts-for-publication'),
                 'cancel' => __('Cancel', 'queue-posts-for-publication'),
-                'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
-                'queueSuccess' => /* translators: %s: Scheduled date and time */ __('Post scheduled for %s', 'queue-posts-for-publication'),
                 'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
                 'slotConflict' => /* translators: %s: Title of the post currently scheduled in this slot */ __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'queue-posts-for-publication'),
                 'noSlots' => __('No publication slots configured.', 'queue-posts-for-publication'),
@@ -746,8 +744,6 @@ class Queue_Posts_For_Publication {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('qpfp-queue-nonce'),
                 'i18n' => array(
-                    'confirmQueue' => __('Are you sure you want to queue this post for publication?', 'queue-posts-for-publication'),
-                    'queueSuccess' => __('Post queued successfully.', 'queue-posts-for-publication'),
                     'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
                     'noSlots' => __('No slots available.', 'queue-posts-for-publication'),
                     'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),

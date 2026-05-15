@@ -42,6 +42,8 @@
 .block-qpfp-button {
     width: 100%;
     box-sizing: border-box;
+    justify-content: center;
+    text-align: center;
 }
 
 .block-qpfp-button.block-qpfp-button-primary {
