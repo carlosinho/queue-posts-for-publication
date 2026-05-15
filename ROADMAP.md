@@ -6,7 +6,7 @@ WordPress plugin **v0.11**: recurring weekly publication slots in a custom table
 
 ## Roadmap
 
-### v0.11 — Working plugin (shipped)
+### v0.10 — Working plugin - main logic
 
 - [x] Custom table `{$wpdb->prefix}qpfp_publication_slots` created on activation (`dbDelta`): `day_of_week`, `time_of_day`, `created_at`
 - [x] **Publication Slots** admin screen: add and delete recurring weekly slots (day + local time); validation for day 1–7 and `HH:MM`
@@ -19,14 +19,24 @@ WordPress plugin **v0.11**: recurring weekly publication slots in a custom table
 - [x] Translation: `load_plugin_textdomain()`, `languages/queue-posts-for-publication.pot`
 - [x] Admin styling: `css/admin.css`
 
-### v0.12 — Tighter
+### v0.12 — Tightening
 
 - [x] No slots defined fix. 
-    Spec: If no publication slots are defined, assigning a post to the **next available slot** must 
-    not publish or schedule it immediately (or must fail clearly).
-    Implemented: queueing to the **next available slot** now fails clearly when no publication slots are configured, instead of falling through to an invalid/immediate schedule path.
-- [ ] Duplicate slots fix. 
-    Spec: Two rows can share the same day and time; **nearest / next available slot** behavior then ignores the duplicate and schedules for the slot after. Fix duplication (validation and/or storage) and align “next slot” logic with how duplicates should behave.
+    - If no publication slots are defined, assigning a post to the **next available slot** must not publish or schedule it immediately (or must fail clearly).
+    - Implemented: queueing to the **next available slot** now fails clearly when no publication slots are configured, instead of falling through to an invalid/immediate schedule path.
+- [x] Prevent duplicate slots. 
+    - Implemented: admin slot creation now rejects duplicate day/time rows so the duplicate-slot bug cannot be introduced going forward.
+- [ ] Inconsistencies in readme.md about conflict resolution.
+    - The readme says that there's no conflict resolution or automatic reshuffling when a slot is already occupied.
+    - Do we need that? What it means? Is it a situation likely to happen?
+- [ ] Inconsistencies in readme.md - why does the readme say that a real settings screen doesn't exit?
+    - The plugin has its section in the wp-admin where the user can set publication slots.
+- [ ] Inconsistencies in architecture.md when it comes to WordPress filters. 
+    - From the architecture doc: Queue handlers remove all filters from `wp_insert_post_data` and `wp_insert_post` before scheduling, then restore specific callbacks in a narrow way; that is a broad request-scope side effect and may interact poorly with other plugins
+    - Why is that a real problem?
+- [ ] Inconsistencies in architecture.md when it comes to implemented features.
+    - This is about the section from the architecture doc: "Present in code but not functionally part of the product today:"
+    - I'm not sure all of those are a bug; analyze if they're maybe part of the core idea of the plugin and how it's meant to work.
 
 ### v0.20 — TBD
 

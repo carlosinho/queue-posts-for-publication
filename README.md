@@ -9,6 +9,7 @@ It exists to solve a very specific workflow: keep using WordPress' native schedu
 The current implementation provides:
 
 - A wp-admin screen for managing recurring publication slots
+- Validation that prevents creating duplicate weekly slots with the same day and time
 - A queue action in the classic editor
 - A queue action in the block editor
 - A scheduled-post overview screen with calendar and list views
@@ -26,6 +27,8 @@ Open `Queue Posts -> Publication Slots` in wp-admin and add one or more weekly s
 - time of day
 
 Each row is a recurring pattern, not a one-off date.
+
+The plugin prevents duplicate slot definitions for the same weekly day and time.
 
 ### 2. Queue a post from the editor
 
@@ -170,6 +173,7 @@ queue-posts-for-publication/
 
 - No queue button in the editor: the plugin hides queue controls for posts already `publish` or `future`.
 - No queue button in the classic editor: the script only loads on `post.php` and `post-new.php`.
+- Cannot add a slot that looks valid: duplicate weekly day/time combinations are rejected.
 - A slot was deleted but queued posts stayed scheduled: this is expected. Deleting a recurring slot only affects future slot selection; existing `future` posts are not moved.
 - An editor can queue posts but cannot manage slots: this is expected. queueing requires `edit_posts`, but slot management pages require `manage_options`.
 - Looking for a settings page: `render_settings_page()` exists in code but is only a stub and is not the active configuration path.
@@ -180,6 +184,7 @@ queue-posts-for-publication/
 What exists now:
 
 - recurring weekly slot definitions
+- duplicate-slot prevention for recurring slot definitions
 - editor-side queue controls
 - scheduled-post overview
 - REST and AJAX scheduling endpoints

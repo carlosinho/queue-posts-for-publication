@@ -66,12 +66,13 @@ Both flows expose the same user actions:
 These rules define how the current implementation behaves:
 
 1. Slot definitions are recurring weekly patterns, not dated schedule rows.
-2. Actual queue state is represented by `wp_posts.post_status = 'future'`.
-3. Slot availability is computed by exact local datetime collision against existing future posts.
-4. Deleting a slot definition does not move or unschedule posts that are already set to publish in the future.
-5. Slot management is admin-only (`manage_options`), but queueing is editor-level (`edit_posts`).
-6. The UI and APIs expose at most 10 available slots at a time.
-7. The plugin does not publish posts itself. It hands off to normal WordPress scheduled publishing once a post is marked `future`.
+2. Slot definitions are expected to be unique by weekly day and local time.
+3. Actual queue state is represented by `wp_posts.post_status = 'future'`.
+4. Slot availability is computed by exact local datetime collision against existing future posts.
+5. Deleting a slot definition does not move or unschedule posts that are already set to publish in the future.
+6. Slot management is admin-only (`manage_options`), but queueing is editor-level (`edit_posts`).
+7. The UI and APIs expose at most 10 available slots at a time.
+8. The plugin does not publish posts itself. It hands off to normal WordPress scheduled publishing once a post is marked `future`.
 
 ## Persistence Model
 
@@ -129,13 +130,15 @@ Flow:
 Flow:
 
 - admin opens `admin.php?page=queue-posts-slots`
-- POST with nonce `qpfp_add_slot` inserts a row into `qpfp_publication_slots`
+- POST with nonce `qpfp_add_slot` validates the submitted slot and inserts a row into `qpfp_publication_slots`
 - POST with nonce `qpfp_delete_slot` deletes a row by `id`
 
 Validation:
 
 - `day_of_week` must be `1..7`
 - `time_of_day` must match `HH:MM`
+- the `(day_of_week, time_of_day)` combination must not already exist
+- accepted `HH:MM` input is normalized to `HH:MM:00` before storage
 
 ### 3. Available-slot calculation
 
@@ -289,6 +292,7 @@ This architecture should be fine for modest numbers of future posts and recurrin
 ### Implemented handling
 
 - add-slot requests validate day and time format
+- add-slot requests reject duplicate weekly day/time combinations
 - slot insert/delete failures surface through `settings_errors()`
 - AJAX queue handlers return explicit JSON errors
 - empty slot lists return an empty success payload

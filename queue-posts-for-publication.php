@@ -3,7 +3,7 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.11
+ * Version: 0.12
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -478,15 +478,35 @@ class Queue_Posts_For_Publication {
             return;
         }
 
+        $normalized_time_of_day = $time_of_day . ':00';
+
         global $wpdb;
         
         // Debug information
-        $this->qpfp_log('Attempting to add slot: day=' . $day_of_week . ', time=' . $time_of_day);
+        $this->qpfp_log('Attempting to add slot: day=' . $day_of_week . ', time=' . $normalized_time_of_day);
         $this->qpfp_log('Table name: ' . $wpdb->prefix . 'qpfp_publication_slots');
+
+        $duplicate_slot_id = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT id FROM {$wpdb->prefix}qpfp_publication_slots WHERE day_of_week = %d AND time_of_day = %s LIMIT 1",
+                $day_of_week,
+                $normalized_time_of_day
+            )
+        );
+
+        if ($duplicate_slot_id) {
+            add_settings_error(
+                'qpfp_messages',
+                'qpfp_duplicate_slot',
+                __('That publication slot already exists.', 'queue-posts-for-publication'),
+                'error'
+            );
+            return;
+        }
         
         $data = array(
             'day_of_week' => $day_of_week,
-            'time_of_day' => $time_of_day
+            'time_of_day' => $normalized_time_of_day
         );
         
         $format = array('%d', '%s');

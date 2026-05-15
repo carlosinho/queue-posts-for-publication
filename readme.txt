@@ -3,7 +3,7 @@ Contributors: karol-k
 Tags: posts, scheduling, queue, publication, calendar
 Requires at least: 5.0
 Tested up to: 6.9.4
-Stable tag: 0.11
+Stable tag: 0.12
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
