@@ -3,7 +3,7 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.13
+ * Version: 0.25
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -68,7 +68,6 @@ class Queue_Posts_For_Publication {
         // Core WordPress hooks
         add_action('init', array($this, 'init'));
         add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_init', array($this, 'register_settings'));
         add_action('rest_api_init', array($this, 'register_rest_routes'));
         
         // Activation/Deactivation hooks
@@ -303,6 +302,51 @@ class Queue_Posts_For_Publication {
     }
 
     /**
+     * Check whether any recurring publication slots are configured.
+     *
+     * @return bool Whether the site has at least one slot definition.
+     */
+    private function has_publication_slots() {
+        global $wpdb;
+
+        return (bool) $wpdb->get_var("SELECT 1 FROM {$wpdb->prefix}qpfp_publication_slots LIMIT 1");
+    }
+
+    /**
+     * Select an available slot by concrete occurrence timestamp, falling back to recurring slot ID.
+     *
+     * @param array $available_slots Available slot occurrences.
+     * @param mixed $slot_timestamp Selected occurrence timestamp.
+     * @param mixed $slot_id Selected recurring slot ID.
+     * @return array|null Matching available slot occurrence.
+     */
+    private function find_selected_available_slot($available_slots, $slot_timestamp = null, $slot_id = null) {
+        if ($slot_timestamp !== null && $slot_timestamp !== '') {
+            $selected_timestamp = intval($slot_timestamp);
+
+            foreach ($available_slots as $slot) {
+                if (intval($slot['timestamp']) === $selected_timestamp) {
+                    return $slot;
+                }
+            }
+
+            return null;
+        }
+
+        if ($slot_id !== null && $slot_id !== '') {
+            foreach ($available_slots as $slot) {
+                if ($slot['id'] == $slot_id) {
+                    return $slot;
+                }
+            }
+
+            return null;
+        }
+
+        return !empty($available_slots) ? $available_slots[0] : null;
+    }
+
+    /**
      * Helper function to get day name from number.
      */
     private function get_day_name($day_number) {
@@ -316,45 +360,6 @@ class Queue_Posts_For_Publication {
             7 => __('Sunday', 'queue-posts-for-publication')
         );
         return $days[$day_number];
-    }
-
-    /**
-     * Schedule cron jobs.
-     */
-    private function schedule_cron_jobs() {
-        if (!wp_next_scheduled('qpfp_check_publication_slots')) {
-            wp_schedule_event(time(), 'hourly', 'qpfp_check_publication_slots');
-        }
-    }
-
-    /**
-     * Unschedule cron jobs.
-     */
-    private function unschedule_cron_jobs() {
-        wp_clear_scheduled_hook('qpfp_check_publication_slots');
-    }
-
-    /**
-     * Register plugin settings.
-     */
-    public function register_settings() {
-        register_setting('qpfp_options', 'qpfp_publication_slots');
-        register_setting('qpfp_options', 'qpfp_timezone');
-        
-        // Add settings section
-        add_settings_section(
-            'qpfp_slots_section',
-            __('Publication Slots', 'queue-posts-for-publication'),
-            array($this, 'render_slots_section'),
-            'queue-posts-slots'
-        );
-    }
-
-    /**
-     * Render slots section description.
-     */
-    public function render_slots_section() {
-        echo '<p>' . esc_html__('Configure your publication slots. Each slot represents a specific day and time when posts can be published.', 'queue-posts-for-publication') . '</p>';
     }
 
     /**
@@ -643,7 +648,7 @@ class Queue_Posts_For_Publication {
                         $day_of_week = date('N', $slot_info['timestamp']);
                         $day_name = $days[$day_of_week];
                     ?>
-                        <option value="<?php echo esc_attr($slot_info['id']); ?>">
+                        <option value="<?php echo esc_attr($slot_info['timestamp']); ?>">
                             <?php echo esc_html(date_i18n($date_format . ' ' . $time_format, $slot_info['timestamp']) . ' (' . $day_name . ')'); ?>
                         </option>
                     <?php endforeach; ?>
@@ -698,6 +703,7 @@ class Queue_Posts_For_Publication {
         wp_set_script_translations('qpfp-block-editor', 'queue-posts-for-publication');
 
         // Add localized data
+        $has_publication_slots = $this->has_publication_slots();
         wp_localize_script('qpfp-block-editor', 'qpfpBlockEditor', array(
             'i18n' => array(
                 'queueButton' => __('Queue for publication', 'queue-posts-for-publication'),
@@ -708,9 +714,13 @@ class Queue_Posts_For_Publication {
                 'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
                 'slotConflict' => /* translators: %s: Title of the post currently scheduled in this slot */ __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'queue-posts-for-publication'),
                 'noSlots' => __('No publication slots configured.', 'queue-posts-for-publication'),
+                'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'queue-posts-for-publication'),
+                'manageSlots' => __('Manage publication slots', 'queue-posts-for-publication'),
                 'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
                 'pickSlot' => __('Pick a slot', 'queue-posts-for-publication')
             ),
+            'hasPublicationSlots' => $has_publication_slots,
+            'manageSlotsUrl' => $has_publication_slots || !current_user_can('manage_options') ? '' : admin_url('admin.php?page=queue-posts-slots'),
             'restNonce' => wp_create_nonce('wp_rest'),
             'restUrl' => esc_url_raw(rest_url())
         ));
@@ -743,9 +753,13 @@ class Queue_Posts_For_Publication {
             wp_localize_script('qpfp-admin', 'qpfpAdmin', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('qpfp-queue-nonce'),
+                'hasPublicationSlots' => $this->has_publication_slots(),
+                'manageSlotsUrl' => current_user_can('manage_options') ? admin_url('admin.php?page=queue-posts-slots') : '',
                 'i18n' => array(
                     'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
                     'noSlots' => __('No slots available.', 'queue-posts-for-publication'),
+                    'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'queue-posts-for-publication'),
+                    'manageSlots' => __('Manage publication slots', 'queue-posts-for-publication'),
                     'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),
                     'pickSlot' => __('Pick a slot', 'queue-posts-for-publication'),
                     'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
@@ -789,13 +803,6 @@ class Queue_Posts_For_Publication {
                 QPFP_VERSION
             );
         }
-    }
-
-    /**
-     * Render settings page.
-     */
-    public function render_settings_page() {
-        // Settings page will be implemented later
     }
 
     /**
@@ -1013,6 +1020,10 @@ class Queue_Posts_For_Publication {
                 'slot_id' => array(
                     'required' => false,
                     'type' => 'string'
+                ),
+                'slot_timestamp' => array(
+                    'required' => false,
+                    'type' => 'integer'
                 )
             )
         ));
@@ -1046,6 +1057,7 @@ class Queue_Posts_For_Publication {
             $day_name = $days[$day_of_week];
             return array(
                 'id' => $slot_info['id'],
+                'timestamp' => $slot_info['timestamp'],
                 'label' => date($date_format . ' ' . $time_format, $slot_info['timestamp']) . ' (' . $day_name . ')'
             );
         }, $available_slots);
@@ -1059,13 +1071,12 @@ class Queue_Posts_For_Publication {
     public function queue_post_rest($request) {
         $post_id = $request->get_param('post_id');
         $slot_id = $request->get_param('slot_id');
+        $slot_timestamp = $request->get_param('slot_timestamp');
         $no_slots_message = __('No publication slots configured.', 'queue-posts-for-publication');
         $slot_unavailable_message = __('Selected slot not available.', 'queue-posts-for-publication');
         
-        // Get available slots: 
-        // if slot_id is provided get multiple slots to find the specific one,
-        // otherwise just get the next available slot
-        $available_slots = $this->get_available_slots($slot_id ? 10 : 1);
+        // Get enough slots to validate a picked occurrence; otherwise just use the next available slot.
+        $available_slots = $this->get_available_slots(($slot_timestamp || $slot_id) ? 10 : 1);
 
         if (empty($available_slots)) {
             return new WP_Error(
@@ -1075,18 +1086,7 @@ class Queue_Posts_For_Publication {
             );
         }
         
-        // Get the selected slot
-        $selected_slot = null;
-        if ($slot_id) {
-            foreach ($available_slots as $slot) {
-                if ($slot['id'] == $slot_id) {
-                    $selected_slot = $slot;
-                    break;
-                }
-            }
-        } else {
-            $selected_slot = !empty($available_slots) ? $available_slots[0] : null;
-        }
+        $selected_slot = $this->find_selected_available_slot($available_slots, $slot_timestamp, $slot_id);
 
         if (!$selected_slot) {
             return new WP_Error(
@@ -1128,16 +1128,8 @@ class Queue_Posts_For_Publication {
             'post_excerpt' => $post->post_excerpt
         );
         
-        // Temporarily remove filters that might interfere with post status
-        remove_all_filters('wp_insert_post_data');
-        remove_all_filters('wp_insert_post');
-        
         // Update the post
         $update_result = wp_insert_post($post_data, true);
-        
-        // Restore filters
-        add_filter('wp_insert_post_data', 'wp_filter_post_data');
-        add_filter('wp_insert_post', 'wp_insert_post');
         
         if (is_wp_error($update_result)) {
             $this->qpfp_log('Failed to schedule post: ' . $update_result->get_error_message());
@@ -1185,6 +1177,7 @@ class Queue_Posts_For_Publication {
             $day_name = $days[$day_of_week];
             return array(
                 'id' => $slot_info['id'],
+                'timestamp' => $slot_info['timestamp'],
                 'label' => date($date_format . ' ' . $time_format, $slot_info['timestamp']) . ' (' . $day_name . ')'
             );
         }, $available_slots);
@@ -1205,6 +1198,7 @@ class Queue_Posts_For_Publication {
 
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
         $slot_id = isset($_POST['slot_id']) ? $_POST['slot_id'] : null;
+        $slot_timestamp = isset($_POST['slot_timestamp']) ? $_POST['slot_timestamp'] : null;
         $no_slots_message = __('No publication slots configured.', 'queue-posts-for-publication');
         $slot_unavailable_message = __('Selected slot not available.', 'queue-posts-for-publication');
 
@@ -1213,26 +1207,15 @@ class Queue_Posts_For_Publication {
             return;
         }
 
-        // Get available slots
-        $available_slots = $this->get_available_slots($slot_id ? 10 : 1);
+        // Get enough slots to validate a picked occurrence; otherwise just use the next available slot.
+        $available_slots = $this->get_available_slots(($slot_timestamp || $slot_id) ? 10 : 1);
 
         if (empty($available_slots)) {
             wp_send_json_error($no_slots_message);
             return;
         }
         
-        // Get the selected slot
-        $selected_slot = null;
-        if ($slot_id) {
-            foreach ($available_slots as $slot) {
-                if ($slot['id'] == $slot_id) {
-                    $selected_slot = $slot;
-                    break;
-                }
-            }
-        } else {
-            $selected_slot = !empty($available_slots) ? $available_slots[0] : null;
-        }
+        $selected_slot = $this->find_selected_available_slot($available_slots, $slot_timestamp, $slot_id);
 
         if (!$selected_slot) {
             wp_send_json_error($slot_unavailable_message);
@@ -1271,16 +1254,8 @@ class Queue_Posts_For_Publication {
             'post_excerpt' => $post->post_excerpt
         );
         
-        // Temporarily remove filters that might interfere with post status
-        remove_all_filters('wp_insert_post_data');
-        remove_all_filters('wp_insert_post');
-        
         // Update the post
         $update_result = wp_insert_post($post_data, true);
-        
-        // Restore filters
-        add_filter('wp_insert_post_data', 'wp_filter_post_data');
-        add_filter('wp_insert_post', 'wp_insert_post');
 
         if (is_wp_error($update_result)) {
             $this->qpfp_log('Failed to schedule post: ' . $update_result->get_error_message());
@@ -1290,7 +1265,15 @@ class Queue_Posts_For_Publication {
 
         wp_send_json_success(array(
             'success' => true,
-            'scheduled_time' => date(get_option('date_format') . ' ' . get_option('time_format'), $selected_slot['timestamp'])
+            'scheduled_time' => date(get_option('date_format') . ' ' . get_option('time_format'), $selected_slot['timestamp']),
+            'redirect_url' => add_query_arg(
+                array(
+                    'post' => $post_id,
+                    'action' => 'edit',
+                    'message' => 9,
+                ),
+                admin_url('post.php')
+            ),
         ));
     }
 }

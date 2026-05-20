@@ -82,7 +82,7 @@
                 const slots = await apiFetch({ path: 'wp/v2/qpfp/slots' });
                 if (slots && slots.length > 0) {
                     setAvailableSlots(slots.map(slot => ({
-                        value: slot.id.toString(),
+                        value: slot.timestamp.toString(),
                         label: slot.label
                     })));
                     setShowSlots(true);
@@ -107,7 +107,7 @@
                     method: 'POST',
                     data: {
                         post_id: getCurrentPostId(),
-                        slot_id: selectedSlot
+                        slot_timestamp: parseInt(selectedSlot, 10)
                     }
                 });
 
@@ -213,6 +213,27 @@
                             className: 'block-qpfp-button block-qpfp-button-cancel'
                         },
                         qpfpBlockEditor.i18n.cancel
+                    )
+                )
+            );
+        }
+
+        if (!qpfpBlockEditor.hasPublicationSlots) {
+            return createElement(
+                PluginPostStatusInfo,
+                {},
+                createElement(
+                    'div',
+                    { className: 'qpfp-setup-message' },
+                    createElement(
+                        'p',
+                        {},
+                        qpfpBlockEditor.i18n.configureSlotsFirst
+                    ),
+                    qpfpBlockEditor.manageSlotsUrl && createElement(
+                        'a',
+                        { href: qpfpBlockEditor.manageSlotsUrl },
+                        qpfpBlockEditor.i18n.manageSlots
                     )
                 )
             );

@@ -38,8 +38,6 @@ Implemented admin pages:
 - `queue-posts-slots`: add and delete recurring slot definitions
 - `queue-posts-list`: inspect all `future` posts in calendar or list form
 
-There is a `render_settings_page()` method, but it is only a placeholder and is not part of the active product surface.
-
 ### Editor integrations
 
 Two separate UIs schedule posts through the same underlying PHP logic:
@@ -68,7 +66,7 @@ These rules define how the current implementation behaves:
 1. Slot definitions are recurring weekly patterns, not dated schedule rows.
 2. Slot definitions are expected to be unique by weekly day and local time.
 3. Actual queue state is represented by `wp_posts.post_status = 'future'`.
-4. Slot availability is computed by exact local datetime collision against existing future posts.
+4. Slot availability is computed by exact local datetime collision against existing future posts. Queue-for-next and pick-slot flows only offer and assign datetimes that pass this check.
 5. Deleting a slot definition does not move or unschedule posts that are already set to publish in the future.
 6. Slot management is admin-only (`manage_options`), but queueing is editor-level (`edit_posts`).
 7. The UI and APIs expose at most 10 available slots at a time.
@@ -106,14 +104,9 @@ Why this exists:
 - posts remain normal WordPress posts
 - no second "queue item" model has to be synchronized
 
-### Registered options
+### WordPress site settings
 
-The plugin registers:
-
-- `qpfp_publication_slots`
-- `qpfp_timezone`
-
-In the current codebase these are not the active data source for slot scheduling. Slot rows come from the custom table, and there is no working settings screen that drives these options.
+The plugin reads WordPress core date/time settings for formatting and calendar layout. Publication slot configuration is stored in the custom table, not in plugin-specific options.
 
 ## Data Flows
 
@@ -173,7 +166,7 @@ Block editor flow:
 
 Scheduling step:
 
-- choose the next slot or a selected slot
+- choose the next slot or a selected occurrence timestamp
 - compute local site datetime
 - convert to GMT with `get_gmt_from_date()`
 - call `wp_insert_post()` with `post_status = future`
@@ -205,7 +198,7 @@ The plugin does not implement:
 
 - a "queued but not scheduled" state
 - automatic rescheduling after slot deletion
-- conflict reshuffling
+- override or reshuffling of other posts to take an occupied datetime
 
 ## Authorization Model
 
@@ -293,29 +286,24 @@ This architecture should be fine for modest numbers of future posts and recurrin
 
 - add-slot requests validate day and time format
 - add-slot requests reject duplicate weekly day/time combinations
+- queueing excludes datetimes already used by other `future` posts (`get_available_slots()`)
 - slot insert/delete failures surface through `settings_errors()`
 - AJAX queue handlers return explicit JSON errors
 - empty slot lists return an empty success payload
 
 ### Important current edge cases
 
-1. Slot identity is a recurring-slot ID, not an occurrence ID.
+1. Occupied datetimes are avoided when queueing through the plugin; override is not.
 
-The UI labels individual upcoming datetimes, but the submitted value is only `slot_id`. If the same weekly slot appears more than once in the next 10 available choices, later occurrences are not uniquely addressable. The backend will match the first available occurrence with that slot ID.
+`get_available_slots()` filters out local datetimes that already have a `future` post, so the editor queue UI and REST/AJAX handlers do not offer or assign those times. There is no flow to displace another post from a datetime the editor wants. Scheduling outside this plugin (for example native WordPress schedule UI at the same time) is outside this scope.
 
-2. Conflict-handling text exists, but conflict reassignment does not.
+The block editor localizes a `slotConflict` string for a possible future override prompt; that UI is not wired.
 
-The block-editor localization includes a `slotConflict` message, but there is no implemented flow that reschedules an already-booked post to free a slot.
-
-3. Legacy or unused code is present.
+2. Legacy or unused lock cleanup code is present.
 
 Present but not wired into runtime behavior:
 
-- `schedule_cron_jobs()`
-- `unschedule_cron_jobs()`
-- hook name `qpfp_check_publication_slots`
-- `cleanup_corrupted_locks()`
-- `render_settings_page()`
+- `cleanup_corrupted_locks()` - This was a day-saving function needed at one time to clean up corrupted transients and post locks.
 
 ## Security Considerations
 
@@ -331,7 +319,7 @@ Current security posture is reasonable for a small admin plugin:
 Notable caveats:
 
 - there is no fine-grained authorization by post ownership or post type beyond `edit_posts`
-- queue handlers remove all filters from `wp_insert_post_data` and `wp_insert_post` before scheduling, then restore specific callbacks in a narrow way; that is a broad request-scope side effect and may interact poorly with other plugins
+- queue handlers use `wp_insert_post()` normally when scheduling, so WordPress core and third-party `wp_insert_post_data` filters and `wp_insert_post` actions still run
 
 ## Scalability Constraints
 
@@ -393,6 +381,8 @@ Exists and drives production behavior in this repo:
 
 - custom slot table
 - slot CRUD in wp-admin
+- duplicate-slot prevention for slot definitions
+- occupancy avoidance when queueing via `get_available_slots()`
 - classic editor queue UI
 - block editor queue UI
 - scheduled-post calendar/list
@@ -400,8 +390,4 @@ Exists and drives production behavior in this repo:
 
 Present in code but not functionally part of the product today:
 
-- settings page placeholder
-- registered timezone option
-- cron helper methods
-- corrupted-lock cleanup helper
-- conflict-resolution copy without conflict-resolution logic
+- block editor `slotConflict` localization (not wired; occupancy is handled by avoiding taken datetimes)

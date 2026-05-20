@@ -48,6 +48,8 @@ When queued, the plugin updates the post to:
 - `post_date = selected local site time`
 - `post_date_gmt = GMT equivalent`
 
+Only datetimes with no other `future` post at that local time are offered or accepted. The plugin does not move or reschedule other posts to free a slot.
+
 After that, WordPress core handles publication in the normal scheduled-post way.
 
 ### 3. Review queued posts
@@ -109,12 +111,7 @@ The implementation reads these WordPress settings:
 - `time_format`
 - `start_of_week`
 
-It also registers these options:
-
-- `qpfp_publication_slots`
-- `qpfp_timezone`
-
-Those option names exist in code, but the active scheduling flow uses the custom table for slots. There is no working settings UI for these options in the current repository.
+Publication slot configuration is managed through `Queue Posts -> Publication Slots` and stored in the custom slots table. The plugin does not register plugin-specific options.
 
 ## API And Integration Points
 
@@ -128,7 +125,8 @@ These are internal plugin endpoints used by the editor UIs.
 `POST /wp-json/wp/v2/qpfp/queue` accepts:
 
 - `post_id` (required)
-- `slot_id` (optional)
+- `slot_timestamp` (optional, concrete available occurrence timestamp)
+- `slot_id` (optional, legacy recurring slot fallback)
 
 Permissions:
 
@@ -176,8 +174,7 @@ queue-posts-for-publication/
 - Cannot add a slot that looks valid: duplicate weekly day/time combinations are rejected.
 - A slot was deleted but queued posts stayed scheduled: this is expected. Deleting a recurring slot only affects future slot selection; existing `future` posts are not moved.
 - An editor can queue posts but cannot manage slots: this is expected. queueing requires `edit_posts`, but slot management pages require `manage_options`.
-- Looking for a settings page: `render_settings_page()` exists in code but is only a stub and is not the active configuration path.
-- Need to schedule far ahead in the same weekly slot: the current picker identifies choices by recurring slot ID, not by occurrence timestamp. In practice, later occurrences of the same weekly slot are not uniquely selectable.
+- Looking for configuration: publication slots are managed at `Queue Posts -> Publication Slots`.
 
 ## Current Scope
 
@@ -185,6 +182,7 @@ What exists now:
 
 - recurring weekly slot definitions
 - duplicate-slot prevention for recurring slot definitions
+- occupancy avoidance when queueing (occupied datetimes are not offered and cannot be selected through the plugin)
 - editor-side queue controls
 - scheduled-post overview
 - REST and AJAX scheduling endpoints
@@ -195,5 +193,4 @@ What does not exist in this repository:
 - a public frontend
 - a custom publish worker
 - automated tests
-- a real settings screen
-- conflict resolution or automatic reshuffling when a slot is already occupied
+- override or reshuffling: taking an occupied datetime by moving another scheduled post, or automatically reshuffling the queue when slots fill up

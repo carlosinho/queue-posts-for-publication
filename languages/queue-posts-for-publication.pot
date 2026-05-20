@@ -228,6 +228,14 @@ msgstr ""
 msgid "No publication slots configured."
 msgstr ""
 
+#: queue-posts-for-publication.php
+msgid "Define publication slots before queueing posts."
+msgstr ""
+
+#: queue-posts-for-publication.php
+msgid "Manage publication slots"
+msgstr ""
+
 #: queue-posts-for-publication.php:693
 #: queue-posts-for-publication.php:735
 msgid "Queue for next slot"

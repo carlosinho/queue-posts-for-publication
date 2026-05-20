@@ -39,6 +39,16 @@
     box-sizing: border-box;
 }
 
+.qpfp-setup-message {
+    display: block;
+    margin-top: 6px;
+    color: #646970;
+}
+
+.qpfp-setup-message p {
+    margin: 0 0 6px;
+}
+
 .block-qpfp-button {
     width: 100%;
     box-sizing: border-box;

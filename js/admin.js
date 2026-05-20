@@ -16,6 +16,8 @@ jQuery(document).ready(function($) {
     const $lastSection = $('.misc-pub-section:last');
     if (!$lastSection.length) return;
 
+    const hasPublicationSlots = !!qpfpAdmin.hasPublicationSlots;
+
     // Create the queue section HTML
     const $queueSection = $('<div/>', {
         class: 'misc-pub-section misc-pub-queue'
@@ -26,68 +28,90 @@ jQuery(document).ready(function($) {
         $('<span/>', {
             class: 'misc-pub-section-label',
             text: 'Queue for publication:'
-        }),
-        $('<a/>', {
-            href: '#qpfp-queue',
-            class: 'edit-qpfp-queue hide-if-no-js',
-            role: 'button'
-        }).append(
-            $('<span/>', {
-                'aria-hidden': 'true',
-                text: 'Edit'
-            }),
-            $('<span/>', {
-                class: 'screen-reader-text',
-                text: 'Edit queue options'
-            })
-        ),
-        $('<div/>', {
-            id: 'qpfp-queue-select',
-            class: 'hide-if-js',
-            style: 'display: none;'
-        }).append(
-            $('<div/>', {
-                class: 'qpfp-queue-options'
+        })
+    );
+
+    if (!hasPublicationSlots) {
+        const $setupMessage = $('<span/>', {
+            class: 'qpfp-setup-message',
+            text: qpfpAdmin.i18n.configureSlotsFirst || 'Define publication slots before queueing posts.'
+        });
+
+        if (qpfpAdmin.manageSlotsUrl) {
+            $setupMessage.append(
+                ' ',
+                $('<a/>', {
+                    href: qpfpAdmin.manageSlotsUrl,
+                    text: qpfpAdmin.i18n.manageSlots || 'Manage publication slots'
+                })
+            );
+        }
+
+        $queueSection.append($setupMessage);
+    } else {
+        $queueSection.append(
+            $('<a/>', {
+                href: '#qpfp-queue',
+                class: 'edit-qpfp-queue hide-if-no-js',
+                role: 'button'
             }).append(
-                $('<button/>', {
-                    type: 'button',
-                    class: 'button button-primary qpfp-queue-next',
-                    text: qpfpAdmin.i18n.queueForNext || 'Queue for next slot'
+                $('<span/>', {
+                    'aria-hidden': 'true',
+                    text: 'Edit'
                 }),
-                $('<button/>', {
-                    type: 'button',
-                    class: 'button qpfp-pick-slot',
-                    text: qpfpAdmin.i18n.pickSlot || 'Pick a slot'
-                }),
-                $('<button/>', {
-                    type: 'button',
-                    class: 'button-link qpfp-cancel-inline',
-                    text: 'Cancel'
+                $('<span/>', {
+                    class: 'screen-reader-text',
+                    text: 'Edit queue options'
                 })
             ),
             $('<div/>', {
-                class: 'qpfp-slot-options',
+                id: 'qpfp-queue-select',
+                class: 'hide-if-js',
                 style: 'display: none;'
             }).append(
-                $('<select/>', {
-                    id: 'qpfp-slot-select',
-                    class: 'qpfp-slot-select'
-                }),
-                $('<div/>').append(
+                $('<div/>', {
+                    class: 'qpfp-queue-options'
+                }).append(
                     $('<button/>', {
                         type: 'button',
-                        class: 'button button-primary qpfp-save-queue',
-                        text: 'OK'
+                        class: 'button button-primary qpfp-queue-next',
+                        text: qpfpAdmin.i18n.queueForNext || 'Queue for next slot'
                     }),
                     $('<button/>', {
                         type: 'button',
-                        class: 'button-link qpfp-cancel-queue',
+                        class: 'button qpfp-pick-slot',
+                        text: qpfpAdmin.i18n.pickSlot || 'Pick a slot'
+                    }),
+                    $('<button/>', {
+                        type: 'button',
+                        class: 'button-link qpfp-cancel-inline',
                         text: 'Cancel'
                     })
+                ),
+                $('<div/>', {
+                    class: 'qpfp-slot-options',
+                    style: 'display: none;'
+                }).append(
+                    $('<select/>', {
+                        id: 'qpfp-slot-select',
+                        class: 'qpfp-slot-select'
+                    }),
+                    $('<div/>').append(
+                        $('<button/>', {
+                            type: 'button',
+                            class: 'button button-primary qpfp-save-queue',
+                            text: 'OK'
+                        }),
+                        $('<button/>', {
+                            type: 'button',
+                            class: 'button-link qpfp-cancel-queue',
+                            text: 'Cancel'
+                        })
+                    )
                 )
             )
-        )
-    );
+        );
+    }
 
     // Add the section after the last misc-pub-section
     $lastSection.after($queueSection);
@@ -118,7 +142,7 @@ jQuery(document).ready(function($) {
             }));
             availableSlots.forEach(slot => {
                 $select.append($('<option/>', {
-                    value: slot.id,
+                    value: slot.timestamp,
                     text: slot.label
                 }));
             });
@@ -130,24 +154,33 @@ jQuery(document).ready(function($) {
     }
 
     // Helper function to queue post
-    async function queuePost(slotId = null) {
+    async function queuePost(slotTimestamp = null) {
         isLoading = true;
         updateLoadingState();
 
         try {
             const postId = $('#post_ID').val();
-            const response = await $.post(qpfpAdmin.ajaxUrl, {
+            const data = {
                 action: 'qpfp_queue_post',
                 _ajax_nonce: qpfpAdmin.nonce,
-                post_id: postId,
-                slot_id: slotId
-            });
+                post_id: postId
+            };
+
+            if (slotTimestamp) {
+                data.slot_timestamp = slotTimestamp;
+            }
+
+            const response = await $.post(qpfpAdmin.ajaxUrl, data);
 
             if (!response.success) {
                 throw new Error(response.data || 'Failed to queue post');
             }
 
-            window.location.reload();
+            if (response.data && response.data.redirect_url) {
+                window.location.href = response.data.redirect_url;
+            } else {
+                window.location.reload();
+            }
         } catch (error) {
             console.error('Failed to queue post:', error);
             alert(error.message || qpfpAdmin.i18n.queueError || 'Failed to queue post.');
