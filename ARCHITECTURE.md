@@ -22,14 +22,20 @@ That keeps publication compatible with WordPress' existing scheduled-post behavi
 
 ### Bootstrap and orchestration
 
-All server-side logic lives in `queue-posts-for-publication.php`.
+`queue-posts-for-publication.php` loads `includes/` and calls `queue_posts_for_publication_init()`.
 
-Key traits:
+`includes/class-queue-posts-for-publication.php` defines the singleton `Queue_Posts_For_Publication`, registers hooks in `init_hooks()`, and composes these traits:
 
-- singleton plugin class: `Queue_Posts_For_Publication`
-- hooks registered in `init_hooks()`
-- activation creates the custom table
-- one file owns admin pages, REST routes, AJAX handlers, asset loading, and scheduling logic
+| Trait | Responsibility |
+| --- | --- |
+| `QPFP_Plugin_Trait` | Textdomain, activation/`create_tables()`, admin menu, `prevent_post_lock_corruption`, `qpfp_log()` |
+| `QPFP_Scheduler_Trait` | `get_available_slots()`, occupancy map, queue resolve/schedule, weekday labels, UI slot formatting |
+| `QPFP_Admin_Slots_Trait` | Publication Slots screen (add/delete) |
+| `QPFP_Editor_Trait` | Admin/block editor assets, classic footer dropdown |
+| `QPFP_Admin_Queue_List_Trait` | Queued Posts calendar and list |
+| `QPFP_Api_Trait` | REST routes and AJAX handlers |
+
+Activation and the textdomain path use `QPFP_PLUGIN_FILE` (the bootstrap file), not `__FILE__` inside a trait.
 
 ### Admin pages
 
@@ -135,13 +141,13 @@ Validation:
 
 ### 3. Available-slot calculation
 
-The shared method is `get_available_slots($limit = 0)`.
+Core methods in `QPFP_Scheduler_Trait`: `get_available_slots($limit = 0)`, `get_taken_slot_datetimes()`, `find_selected_available_slot()`.
 
-Algorithm:
+Algorithm for `get_available_slots()`:
 
 1. Read all recurring slot definitions from `qpfp_publication_slots`.
-2. Read all future posts from `wp_posts` through `get_posts()`.
-3. Build a map of taken local datetimes from those future posts.
+2. Load all `future` posts in one `get_posts()` call.
+3. Build a map of taken local datetimes via `get_taken_slot_datetimes()` (`post_date` string → post ID).
 4. Expand each recurring slot into its next 10 weekly occurrences.
 5. Sort all possible occurrences chronologically.
 6. Drop occurrences whose exact `Y-m-d H:i:s` datetime is already taken.
@@ -156,20 +162,20 @@ Important consequence:
 Classic editor flow:
 
 - `js/admin.js` calls `qpfp_get_slots` or `qpfp_queue_post`
-- PHP handlers are `handle_get_slots_ajax()` and `handle_queue_post_ajax()`
+- PHP handlers in `QPFP_Api_Trait`: `handle_get_slots_ajax()`, `handle_queue_post_ajax()`
 
 Block editor flow:
 
-- `js/block-editor.js` calls `GET /wp-json/wp/v2/qpfp/slots`
-- `POST /wp-json/wp/v2/qpfp/queue`
-- PHP handlers are `get_slots_rest()` and `queue_post_rest()`
+- `js/block-editor.js` calls `GET /wp-json/wp/v2/qpfp/slots` and `POST /wp-json/wp/v2/qpfp/queue`
+- PHP handlers: `get_slots_rest()`, `queue_post_rest()`
 
-Scheduling step:
+Shared scheduling in `QPFP_Scheduler_Trait` (used by both transports):
 
-- choose the next slot or a selected occurrence timestamp
-- compute local site datetime
-- convert to GMT with `get_gmt_from_date()`
-- call `wp_insert_post()` with `post_status = future`
+- `format_available_slots_for_ui()` — slot pickers return `{ id, timestamp, label }` using `date_i18n()` and `get_weekday_labels()`
+- `resolve_queue_slot( $slot_timestamp, $slot_id )` — loads available slots (limit 1 for queue-next, 10 when picking), returns an occurrence or `WP_Error`
+- `schedule_post_on_available_slot( $post_id, $occurrence )` — local `post_date`, `post_date_gmt` via `get_gmt_from_date()`, `wp_insert_post()` with `post_status = future` and existing title/content/excerpt
+
+REST/AJAX differ only in nonces, HTTP status codes, JSON shape, and the classic editor redirect after queue.
 
 ### 5. Future-post overview
 
@@ -257,9 +263,9 @@ Characteristics:
 - mirrors the REST behavior closely
 - also protected by nonce and `edit_posts`
 
-### Duplication trade-off
+### REST and AJAX
 
-The queueing logic is effectively duplicated between REST and AJAX handlers rather than abstracted into one shared scheduling method. That keeps each endpoint straightforward, but increases maintenance cost and drift risk.
+Two transports serve two editors. Queue rules and slot labels are centralized in `QPFP_Scheduler_Trait`; `QPFP_Api_Trait` handles request/response details per transport.
 
 ## Performance Decisions
 
@@ -299,17 +305,15 @@ This architecture should be fine for modest numbers of future posts and recurrin
 
 The block editor localizes a `slotConflict` string for a possible future override prompt; that UI is not wired.
 
-2. Legacy or unused lock cleanup code is present.
+2. Post lock handling.
 
-Present but not wired into runtime behavior:
-
-- `cleanup_corrupted_locks()` - This was a day-saving function needed at one time to clean up corrupted transients and post locks.
+`prevent_post_lock_corruption` on `wp_check_post_lock` clears invalid array-shaped locks for a post.
 
 ## Security Considerations
 
 Current security posture is reasonable for a small admin plugin:
 
-- direct file access is blocked with a `WPINC` check
+- bootstrap and each `includes/*.php` file block direct access (`ABSPATH` guard on includes; bootstrap uses `defined( 'ABSPATH' )`)
 - capability checks gate admin screens and queue actions
 - nonces protect admin POST and AJAX requests
 - admin output is escaped with `esc_html()`, `esc_attr()`, `esc_url()`, and `esc_js()`
@@ -325,8 +329,7 @@ Notable caveats:
 
 Architectural constraints visible in the current repository:
 
-- most logic lives in one PHP file
-- REST and AJAX paths duplicate behavior
+- server code is one plugin class plus traits (no separate autoloaded services)
 - no service layer or repository layer
 - no tests or fixtures to lock behavior down
 - no asynchronous work beyond normal WordPress scheduled publishing
@@ -351,9 +354,9 @@ Practical regression areas for manual testing:
 
 Maintenance concerns:
 
-- duplicated scheduling logic in AJAX and REST
 - implicit coupling to WordPress editor screens and script handles
-- all major behavior concentrated in a single plugin file
+- trait files must keep correct `ABSPATH` guards and `QPFP_PLUGIN_FILE` usage for hooks/paths
+- no automated regression suite
 
 ## WordPress-Specific Architecture Choices
 
@@ -383,6 +386,7 @@ Exists and drives production behavior in this repo:
 - slot CRUD in wp-admin
 - duplicate-slot prevention for slot definitions
 - occupancy avoidance when queueing via `get_available_slots()`
+- shared queue helpers (`resolve_queue_slot`, `schedule_post_on_available_slot`, `format_available_slots_for_ui`)
 - classic editor queue UI
 - block editor queue UI
 - scheduled-post calendar/list

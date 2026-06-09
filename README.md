@@ -62,8 +62,8 @@ Open `Queue Posts -> Queued Posts` to see all future posts:
 
 ## Tech Stack
 
-- WordPress plugin, loaded from `queue-posts-for-publication.php`
-- PHP for all server-side logic
+- WordPress plugin; bootstrap file `queue-posts-for-publication.php` defines constants, loads `includes/`, and initializes the plugin
+- PHP server-side logic in `includes/` (`Queue_Posts_For_Publication` class composed from traits)
 - WordPress admin pages and hooks
 - `admin-ajax.php` for the classic editor flow
 - WordPress REST API for the block editor flow
@@ -154,18 +154,32 @@ These menu pages require `manage_options`.
 
 ```text
 queue-posts-for-publication/
-├── queue-posts-for-publication.php   # Plugin bootstrap, hooks, admin pages, REST, AJAX, slot logic
+├── queue-posts-for-publication.php              # Bootstrap: QPFP_* constants, require includes, init
+├── includes/
+│   ├── class-queue-posts-for-publication.php    # Singleton, WordPress hook registration
+│   ├── qpfp-plugin-trait.php                    # Activation, table, admin menu, textdomain
+│   ├── qpfp-scheduler-trait.php                 # Slot availability, queue resolve/schedule, labels
+│   ├── qpfp-admin-slots-trait.php               # Publication Slots screen
+│   ├── qpfp-editor-trait.php                    # Script/style enqueue, classic dropdown markup
+│   ├── qpfp-admin-queue-list-trait.php          # Queued Posts calendar/list screen
+│   └── qpfp-api-trait.php                       # REST and AJAX handlers
 ├── css/
-│   └── admin.css                     # Admin/editor/calendar styling
+│   └── admin.css                                # Admin/editor/calendar styling
 ├── js/
-│   ├── admin.js                      # Classic editor queue UI
-│   ├── block-editor.js               # Block editor queue UI
-│   └── calendar-view.js              # Calendar/list toggle on queued-posts screen
+│   ├── admin.js                                 # Classic editor queue UI
+│   ├── block-editor.js                          # Block editor queue UI
+│   └── calendar-view.js                         # Calendar/list toggle on queued-posts screen
 ├── languages/
 │   └── queue-posts-for-publication.pot
+├── ARCHITECTURE.md
+├── ROADMAP.md
 ├── README.md
 └── readme.txt
 ```
+
+Constants: `QPFP_PLUGIN_FILE`, `QPFP_PLUGIN_DIR`, `QPFP_PLUGIN_URL`, `QPFP_VERSION`.
+
+Scheduling and slot-list formatting for both editors go through shared methods on the main class (see `ARCHITECTURE.md`): `get_available_slots()`, `get_taken_slot_datetimes()`, `resolve_queue_slot()`, `schedule_post_on_available_slot()`, `format_available_slots_for_ui()`, `get_weekday_labels()`.
 
 ## Troubleshooting
 
@@ -185,8 +199,9 @@ What exists now:
 - occupancy avoidance when queueing (occupied datetimes are not offered and cannot be selected through the plugin)
 - editor-side queue controls
 - scheduled-post overview
-- REST and AJAX scheduling endpoints
+- REST and AJAX scheduling endpoints (thin wrappers over shared PHP queue helpers)
 - native WordPress scheduled publishing
+- PHP organized under `includes/` traits
 
 What does not exist in this repository:
 

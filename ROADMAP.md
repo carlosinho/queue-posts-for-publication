@@ -38,10 +38,16 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
     - Implemented: classic editor queueing now redirects back to the post edit screen with WordPress' native scheduled-post success notice.
 
 ### v0.30 — Tightening
-- [ ] Potential refactor.
-    - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical and will never happen. I'm looking for actual sub-par execution/implementation.
+- [x] Potential refactor.
+    - Shared queue path for REST and AJAX: `resolve_queue_slot()`, `schedule_post_on_available_slot()`.
+    - Shared slot labels for REST, AJAX, and classic dropdown: `format_available_slots_for_ui()`, `get_weekday_labels()`.
+    - Occupancy map via `get_taken_slot_datetimes()` (one `get_posts()` for all `future` posts; keys from `post_date`).
+    - Server code under `includes/` (`Queue_Posts_For_Publication` + traits); bootstrap in `queue-posts-for-publication.php`; `QPFP_PLUGIN_FILE` for activation and textdomain.
 
 ### v0.40
+- [ ] WordPress.org rollout.
+
+### v0.50
 - [ ] Add automatic reshuffling.
     - Make it possible for posts to take over slots of other posts that have already been scheduled, which means reshuffling the other scheduled posts further - by one slot each.
     - I.e. make this example scenario possible: “I want this Monday 1pm slot even though another post is already scheduled there - move that other post to the next free slot.”
@@ -49,15 +55,16 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
 
 ### Backlog / Future
 
-- TBA
+- `get_available_slots()` early-exit or caching when `future` post volume is large
+- Queued Posts overview pagination or month windowing
 
 ## Known Issues / Tech Debt
 
-- REST and AJAX duplicate queueing logic; drift risk (ARCHITECTURE).
 - No automated tests in the repository.
-- `get_available_slots()` loads all future posts each time; no pagination/caching on the queue overview.
+- `get_available_slots()` loads all future posts on each slots request; each slot definition still expands 10 weekly candidates before filtering.
+- No pagination on the Queued Posts calendar/list screen.
 - Block editor includes `slotConflict` copy without a full conflict-reassignment flow.
-- Dead or stub code paths: `cleanup_corrupted_locks` - this was a day-saving function needed at one time to clean up corrupted transients and post locks.
+- Editor JavaScript remains two clients (`admin.js`, `block-editor.js`); PHP queue rules are shared.
 
 ## Decisions Pending
 
