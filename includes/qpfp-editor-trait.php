@@ -137,7 +137,13 @@ trait QPFP_Editor_Trait {
                 'hasPublicationSlots' => $this->has_publication_slots(),
                 'manageSlotsUrl' => current_user_can('manage_options') ? admin_url('admin.php?page=queue-posts-slots') : '',
                 'i18n' => array(
+                    'queueSectionLabel' => __('Queue for publication:', 'queue-posts-for-publication'),
+                    'edit' => __('Edit', 'queue-posts-for-publication'),
+                    'editQueueOptions' => __('Edit queue options', 'queue-posts-for-publication'),
+                    'cancel' => __('Cancel', 'queue-posts-for-publication'),
+                    'ok' => __('OK', 'queue-posts-for-publication'),
                     'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
+                    'fetchSlotsError' => __('Failed to fetch slots.', 'queue-posts-for-publication'),
                     'noSlots' => __('No slots available.', 'queue-posts-for-publication'),
                     'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'queue-posts-for-publication'),
                     'manageSlots' => __('Manage publication slots', 'queue-posts-for-publication'),

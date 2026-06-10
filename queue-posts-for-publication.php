@@ -3,7 +3,9 @@
  * Plugin Name: Queue Posts for Publication
  * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.32
+ * Version: 0.40
+ * Requires at least: 5.0
+ * Requires PHP: 7.4
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -14,7 +16,7 @@
 
 defined('ABSPATH') || exit;
 
-define('QPFP_VERSION', '0.31');
+define('QPFP_VERSION', '0.40');
 define('QPFP_PLUGIN_FILE', __FILE__);
 define('QPFP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('QPFP_PLUGIN_URL', plugin_dir_url(__FILE__));

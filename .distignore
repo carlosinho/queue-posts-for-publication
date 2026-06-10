@@ -1,0 +1,15 @@
+/.git
+/.github
+/.cursor
+/.wordpress-org
+/.DS_Store
+**/.DS_Store
+/.gitignore
+/.gitattributes
+/.distignore
+/README.md
+/RELEASING.md
+/ARCHITECTURE.md
+/ROADMAP.md
+/assets
+/*.zip

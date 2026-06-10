@@ -15,7 +15,7 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
 - [x] Queue actions: assign to **next available** slot or pick from **up to 10** upcoming free slots (`get_available_slots()` — datetime collision against existing future posts)
 - [x] Scheduling: `wp_insert_post()` with `future`, local `post_date` / GMT via `get_gmt_from_date()`
 - [x] Capabilities: slot/overview menus `manage_options`; queue actions `edit_posts`
-- [x] Translation: `load_plugin_textdomain()`, `languages/queue-posts-for-publication.pot`
+- [x] Translation: i18n-wrapped strings, `languages/queue-posts-for-publication.pot` (WordPress.org loads language packs automatically)
 - [x] Admin styling: `css/admin.css`
 
 ### v0.20 — Smoothing rough edges

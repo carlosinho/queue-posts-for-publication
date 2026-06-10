@@ -368,7 +368,7 @@ The implementation leans on common WordPress patterns:
 - admin pages via `add_menu_page()` and `add_submenu_page()`
 - classic editor integration via `admin_enqueue_scripts` and `admin-ajax.php`
 - block editor integration via `enqueue_block_editor_assets` and REST
-- localization through `load_plugin_textdomain()` and `wp_set_script_translations()`
+- localization through WordPress.org language packs (text domain matches plugin slug) and `wp_set_script_translations()` for block editor scripts
 - native scheduled publishing instead of a custom cron worker
 
 Just as important are the choices it does **not** make:

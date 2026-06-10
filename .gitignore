@@ -1,3 +1,12 @@
 # Mac files
 .DS_Store
-.cursor/rules/my-wordpress-rules.mdc
+**/.DS_Store
+
+# Local Cursor state
+.cursor/
+
+# Release archives are generated artifacts.
+*.zip
+
+# Local release checklist.
+RELEASING.md

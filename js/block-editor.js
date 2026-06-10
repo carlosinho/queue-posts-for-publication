@@ -56,7 +56,7 @@
             setIsLoading(true);
             try {
                 const response = await apiFetch({
-                    path: 'wp/v2/qpfp/queue',
+                    path: 'queue-posts-for-publication/v1/queue',
                     method: 'POST',
                     data: {
                         post_id: getCurrentPostId()
@@ -79,7 +79,7 @@
         const handlePickSlot = async function() {
             setIsLoading(true);
             try {
-                const slots = await apiFetch({ path: 'wp/v2/qpfp/slots' });
+                const slots = await apiFetch({ path: 'queue-posts-for-publication/v1/slots' });
                 if (slots && slots.length > 0) {
                     setAvailableSlots(slots.map(slot => ({
                         value: slot.timestamp.toString(),
@@ -103,7 +103,7 @@
             setIsLoading(true);
             try {
                 const response = await apiFetch({
-                    path: 'wp/v2/qpfp/queue',
+                    path: 'queue-posts-for-publication/v1/queue',
                     method: 'POST',
                     data: {
                         post_id: getCurrentPostId(),

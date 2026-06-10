@@ -254,6 +254,10 @@ trait QPFP_Scheduler_Trait {
             return new WP_Error('invalid_post', __('Invalid post ID.', 'queue-posts-for-publication'));
         }
 
+        if (!current_user_can('edit_post', $post_id)) {
+            return new WP_Error('rest_forbidden', __('You cannot edit this post.', 'queue-posts-for-publication'));
+        }
+
         $local_datetime = date('Y-m-d H:i:s', $selected_slot['timestamp']);
         $gmt_datetime = get_gmt_from_date($local_datetime);
 

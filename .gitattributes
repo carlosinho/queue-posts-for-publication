@@ -1,0 +1,14 @@
+/.gitignore export-ignore
+/.gitattributes export-ignore
+/.distignore export-ignore
+/.github export-ignore
+/.cursor export-ignore
+/.wordpress-org export-ignore
+/README.md export-ignore
+/RELEASING.md export-ignore
+/ARCHITECTURE.md export-ignore
+/ROADMAP.md export-ignore
+/assets export-ignore
+/.DS_Store export-ignore
+**/.DS_Store export-ignore
+/*.zip export-ignore

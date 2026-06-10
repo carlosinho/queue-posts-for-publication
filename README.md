@@ -70,7 +70,7 @@ Open `Queue Posts -> Queued Posts` to see all future posts:
 - jQuery for classic-editor and calendar interactions
 - WordPress block editor packages provided by core script handles
 - One custom database table: `{$wpdb->prefix}qpfp_publication_slots`
-- Translation support via `load_plugin_textdomain()` and `languages/queue-posts-for-publication.pot`
+- Translation support via WordPress.org language packs (text domain `queue-posts-for-publication`) and `languages/queue-posts-for-publication.pot`
 
 There is no `composer.json`, `package.json`, build step, Docker setup, CI pipeline, or deployment automation in this repository.
 

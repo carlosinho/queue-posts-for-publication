@@ -27,7 +27,7 @@ jQuery(document).ready(function($) {
         }),
         $('<span/>', {
             class: 'misc-pub-section-label',
-            text: 'Queue for publication:'
+            text: qpfpAdmin.i18n.queueSectionLabel
         })
     );
 
@@ -57,11 +57,11 @@ jQuery(document).ready(function($) {
             }).append(
                 $('<span/>', {
                     'aria-hidden': 'true',
-                    text: 'Edit'
+                    text: qpfpAdmin.i18n.edit
                 }),
                 $('<span/>', {
                     class: 'screen-reader-text',
-                    text: 'Edit queue options'
+                    text: qpfpAdmin.i18n.editQueueOptions
                 })
             ),
             $('<div/>', {
@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
                     $('<button/>', {
                         type: 'button',
                         class: 'button-link qpfp-cancel-inline',
-                        text: 'Cancel'
+                        text: qpfpAdmin.i18n.cancel
                     })
                 ),
                 $('<div/>', {
@@ -100,12 +100,12 @@ jQuery(document).ready(function($) {
                         $('<button/>', {
                             type: 'button',
                             class: 'button button-primary qpfp-save-queue',
-                            text: 'OK'
+                            text: qpfpAdmin.i18n.ok
                         }),
                         $('<button/>', {
                             type: 'button',
                             class: 'button-link qpfp-cancel-queue',
-                            text: 'Cancel'
+                            text: qpfpAdmin.i18n.cancel
                         })
                     )
                 )
@@ -125,7 +125,7 @@ jQuery(document).ready(function($) {
             });
 
             if (!response.success) {
-                throw new Error(response.data || 'Failed to fetch slots');
+                throw new Error(response.data || qpfpAdmin.i18n.fetchSlotsError);
             }
 
             availableSlots = response.data;
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
             const response = await $.post(qpfpAdmin.ajaxUrl, data);
 
             if (!response.success) {
-                throw new Error(response.data || 'Failed to queue post');
+                throw new Error(response.data || qpfpAdmin.i18n.queueError);
             }
 
             if (response.data && response.data.redirect_url) {
