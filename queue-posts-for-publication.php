@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name: Queue Posts for Publication
- * Plugin URI: https://wpwork.shop/
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
  * Version: 0.40
  * Requires at least: 5.0
