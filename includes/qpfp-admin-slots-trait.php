@@ -98,6 +98,16 @@ trait QPFP_Admin_Slots_Trait {
     private function handle_add_slot() {
         check_admin_referer('qpfp_add_slot', 'qpfp_add_slot_nonce');
 
+        if (!current_user_can('manage_options')) {
+            add_settings_error(
+                'qpfp_messages',
+                'qpfp_forbidden',
+                __('You do not have permission to manage publication slots.', 'queue-posts-for-publication'),
+                'error'
+            );
+            return;
+        }
+
         if (!isset($_POST['day_of_week']) || !isset($_POST['time_of_day'])) {
             add_settings_error(
                 'qpfp_messages',
@@ -189,6 +199,16 @@ trait QPFP_Admin_Slots_Trait {
      */
     private function handle_delete_slot() {
         check_admin_referer('qpfp_delete_slot', 'qpfp_delete_slot_nonce');
+
+        if (!current_user_can('manage_options')) {
+            add_settings_error(
+                'qpfp_messages',
+                'qpfp_forbidden',
+                __('You do not have permission to manage publication slots.', 'queue-posts-for-publication'),
+                'error'
+            );
+            return;
+        }
 
         if (!isset($_POST['slot_id'])) {
             return;

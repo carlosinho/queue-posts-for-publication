@@ -68,19 +68,12 @@ If you delete a publication slot, that slot will no longer be used for future pu
 
 = 0.40 =
 * Initial WordPress.org release.
-
-= 0.30 =
-* Maintenance release.
-
-= 0.20 =
 * Queueing to the next slot now fails clearly when no publication slots have been configured yet.
 * Duplicate weekly publication slots are rejected when adding a slot.
 * Classic and block editors show a setup message when no slots exist yet, instead of broken queue controls.
 * Classic editor shows WordPress' native scheduled-post success notice after queueing.
-
-= 0.10 =
-* **Publication Slots** admin screen to add and delete recurring weekly slots.
-* **Queued Posts** admin screen with calendar and list views of all scheduled posts.
+* Publication Slots admin screen to add and delete recurring weekly slots.
+* Queued Posts admin screen with calendar and list views of all scheduled posts.
 * Queue controls in the classic editor publish box and the block editor post status panel.
 * Queue a post for the next available slot or pick from the next upcoming free slots.
 * Datetimes already used by another scheduled post are not offered when queueing.

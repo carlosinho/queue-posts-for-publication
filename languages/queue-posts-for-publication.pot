@@ -93,6 +93,11 @@ msgid "Are you sure you want to delete this slot?"
 msgstr ""
 
 #: includes/qpfp-admin-slots-trait.php:105
+#: includes/qpfp-admin-slots-trait.php:207
+msgid "You do not have permission to manage publication slots."
+msgstr ""
+
+#: includes/qpfp-admin-slots-trait.php:115
 msgid "Please select both day and time."
 msgstr ""
 
@@ -132,6 +137,10 @@ msgstr ""
 
 #: includes/qpfp-scheduler-trait.php:258
 msgid "You cannot edit this post."
+msgstr ""
+
+#: includes/qpfp-scheduler-trait.php:265
+msgid "This post cannot be queued for publication."
 msgstr ""
 
 #: includes/qpfp-editor-trait.php:28 includes/qpfp-editor-trait.php:91

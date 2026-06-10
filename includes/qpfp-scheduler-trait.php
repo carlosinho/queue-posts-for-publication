@@ -258,6 +258,14 @@ trait QPFP_Scheduler_Trait {
             return new WP_Error('rest_forbidden', __('You cannot edit this post.', 'queue-posts-for-publication'));
         }
 
+        $non_queueable_statuses = array('publish', 'future', 'trash', 'auto-draft');
+        if (in_array($post->post_status, $non_queueable_statuses, true)) {
+            return new WP_Error(
+                'invalid_post_status',
+                __('This post cannot be queued for publication.', 'queue-posts-for-publication')
+            );
+        }
+
         $local_datetime = date('Y-m-d H:i:s', $selected_slot['timestamp']);
         $gmt_datetime = get_gmt_from_date($local_datetime);
 
@@ -302,7 +310,7 @@ trait QPFP_Scheduler_Trait {
      * @return int
      */
     private function get_queue_error_status(WP_Error $error) {
-        if (in_array($error->get_error_code(), array('no_slots_defined', 'slot_not_available'), true)) {
+        if (in_array($error->get_error_code(), array('no_slots_defined', 'slot_not_available', 'invalid_post_status'), true)) {
             return 409;
         }
 
