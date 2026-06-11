@@ -60,9 +60,9 @@ If you delete a publication slot, that slot will no longer be used for future pu
 
 == Screenshots ==
 
-1. The main post scheduling section
-2. Calendar view of scheduled posts
-3. Publication Slots screen for configuring publication slots
+1. Publication Slots - screen for configuring publication slots
+2. Queued Posts - calendar view
+3. The main post scheduling section when editing a post
 
 == Changelog ==
 
