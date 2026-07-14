@@ -1,8 +1,12 @@
-# Pheasantly Queued Publication
+# Queue Posts for Publication aka Pheasantly
 
-`Pheasantly Queued Publication` (formerly `Easy Publication Queue`, and earlier `Queue Posts for Publication`) is a WordPress plugin that lets editors define a recurring weekly publishing cadence and then schedule posts into the next open slot without calculating dates manually.
+`Pheasantly Queued Publication` (formerly `Queue Posts for Publication`) is a WordPress plugin that lets editors define a recurring weekly publishing cadence and then schedule posts into the next open slot without calculating dates manually.
 
 It exists to solve a very specific workflow: keep using WordPress' native scheduled posts, but choose publish times from a reusable queue of weekly slots such as "Monday 13:00" or "Friday 09:30".
+
+<p align="center">
+  <img src="pheasants.png" alt="Pheasantly" width="900" />
+</p>
 
 ## What It Does Now
 
