@@ -2,7 +2,7 @@
 /**
  * Slot availability, queue resolution, and scheduling.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -145,13 +145,13 @@ trait QPFP_Scheduler_Trait {
      */
     private function get_weekday_labels() {
         return array(
-            1 => __('Monday', 'queue-posts-for-publication'),
-            2 => __('Tuesday', 'queue-posts-for-publication'),
-            3 => __('Wednesday', 'queue-posts-for-publication'),
-            4 => __('Thursday', 'queue-posts-for-publication'),
-            5 => __('Friday', 'queue-posts-for-publication'),
-            6 => __('Saturday', 'queue-posts-for-publication'),
-            7 => __('Sunday', 'queue-posts-for-publication'),
+            1 => __('Monday', 'pheasantly-queued-publication'),
+            2 => __('Tuesday', 'pheasantly-queued-publication'),
+            3 => __('Wednesday', 'pheasantly-queued-publication'),
+            4 => __('Thursday', 'pheasantly-queued-publication'),
+            5 => __('Friday', 'pheasantly-queued-publication'),
+            6 => __('Saturday', 'pheasantly-queued-publication'),
+            7 => __('Sunday', 'pheasantly-queued-publication'),
         );
     }
 
@@ -226,7 +226,7 @@ trait QPFP_Scheduler_Trait {
         if (empty($available_slots)) {
             return new WP_Error(
                 'no_slots_defined',
-                __('No publication slots configured.', 'queue-posts-for-publication')
+                __('No publication slots configured.', 'pheasantly-queued-publication')
             );
         }
 
@@ -234,7 +234,7 @@ trait QPFP_Scheduler_Trait {
         if (!$selected_slot) {
             return new WP_Error(
                 'slot_not_available',
-                __('Selected slot not available.', 'queue-posts-for-publication')
+                __('Selected slot not available.', 'pheasantly-queued-publication')
             );
         }
 
@@ -251,18 +251,18 @@ trait QPFP_Scheduler_Trait {
     private function schedule_post_on_available_slot($post_id, array $selected_slot) {
         $post = get_post($post_id);
         if (!$post) {
-            return new WP_Error('invalid_post', __('Invalid post ID.', 'queue-posts-for-publication'));
+            return new WP_Error('invalid_post', __('Invalid post ID.', 'pheasantly-queued-publication'));
         }
 
         if (!current_user_can('edit_post', $post_id)) {
-            return new WP_Error('rest_forbidden', __('You cannot edit this post.', 'queue-posts-for-publication'));
+            return new WP_Error('rest_forbidden', __('You cannot edit this post.', 'pheasantly-queued-publication'));
         }
 
         $non_queueable_statuses = array('publish', 'future', 'trash', 'auto-draft');
         if (in_array($post->post_status, $non_queueable_statuses, true)) {
             return new WP_Error(
                 'invalid_post_status',
-                __('This post cannot be queued for publication.', 'queue-posts-for-publication')
+                __('This post cannot be queued for publication.', 'pheasantly-queued-publication')
             );
         }
 

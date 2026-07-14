@@ -1,6 +1,6 @@
-# Queue Posts for Publication
+# Pheasantly Queued Publication
 
-`Queue Posts for Publication` is a WordPress plugin that lets editors define a recurring weekly publishing cadence and then schedule posts into the next open slot without calculating dates manually.
+`Pheasantly Queued Publication` (formerly `Easy Publication Queue`, and earlier `Queue Posts for Publication`) is a WordPress plugin that lets editors define a recurring weekly publishing cadence and then schedule posts into the next open slot without calculating dates manually.
 
 It exists to solve a very specific workflow: keep using WordPress' native scheduled posts, but choose publish times from a reusable queue of weekly slots such as "Monday 13:00" or "Friday 09:30".
 
@@ -62,15 +62,15 @@ Open `Queue Posts -> Queued Posts` to see all future posts:
 
 ## Tech Stack
 
-- WordPress plugin; bootstrap file `queue-posts-for-publication.php` defines constants, loads `includes/`, and initializes the plugin
-- PHP server-side logic in `includes/` (`Queue_Posts_For_Publication` class composed from traits)
+- WordPress plugin; bootstrap file `pheasantly-queued-publication.php` defines constants, loads `includes/`, and initializes the plugin
+- PHP server-side logic in `includes/` (`QPFP_Pheasantly` class composed from traits)
 - WordPress admin pages and hooks
 - `admin-ajax.php` for the classic editor flow
 - WordPress REST API for the block editor flow
 - jQuery for classic-editor and calendar interactions
 - WordPress block editor packages provided by core script handles
 - One custom database table: `{$wpdb->prefix}qpfp_publication_slots`
-- Translation support via WordPress.org language packs (text domain `queue-posts-for-publication`) and `languages/queue-posts-for-publication.pot`
+- Translation support via WordPress.org language packs (text domain `pheasantly-queued-publication`) and `languages/pheasantly-queued-publication.pot`
 
 There is no `composer.json`, `package.json`, build step, Docker setup, CI pipeline, or deployment automation in this repository.
 
@@ -119,10 +119,10 @@ These are internal plugin endpoints used by the editor UIs.
 
 ### REST API
 
-- `GET /wp-json/wp/v2/qpfp/slots`
-- `POST /wp-json/wp/v2/qpfp/queue`
+- `GET /wp-json/pheasantly-queued-publication/v1/slots`
+- `POST /wp-json/pheasantly-queued-publication/v1/queue`
 
-`POST /wp-json/wp/v2/qpfp/queue` accepts:
+`POST /wp-json/pheasantly-queued-publication/v1/queue` accepts:
 
 - `post_id` (required)
 - `slot_timestamp` (optional, concrete available occurrence timestamp)
@@ -153,8 +153,8 @@ These menu pages require `manage_options`.
 ## Project Structure
 
 ```text
-queue-posts-for-publication/
-├── queue-posts-for-publication.php              # Bootstrap: QPFP_* constants, require includes, init
+pheasantly-queued-publication/
+├── pheasantly-queued-publication.php            # Bootstrap: QPFP_* constants, require includes, init
 ├── includes/
 │   ├── class-queue-posts-for-publication.php    # Singleton, WordPress hook registration
 │   ├── qpfp-plugin-trait.php                    # Activation, table, admin menu, textdomain
@@ -170,7 +170,7 @@ queue-posts-for-publication/
 │   ├── block-editor.js                          # Block editor queue UI
 │   └── calendar-view.js                         # Calendar/list toggle on queued-posts screen
 ├── languages/
-│   └── queue-posts-for-publication.pot
+│   └── pheasantly-queued-publication.pot
 ├── ARCHITECTURE.md
 ├── ROADMAP.md
 ├── README.md

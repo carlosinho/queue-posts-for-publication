@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Queue Posts for Publication
+ * Plugin Name: Pheasantly Queued Publication
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
  * Version: 0.40
  * Requires at least: 5.0
@@ -9,7 +9,7 @@
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: queue-posts-for-publication
+ * Text Domain: pheasantly-queued-publication
  * Domain Path: /languages
  */
 
@@ -31,10 +31,10 @@ require_once QPFP_PLUGIN_DIR . 'includes/class-queue-posts-for-publication.php';
 /**
  * Initialize the plugin.
  *
- * @return Queue_Posts_For_Publication
+ * @return QPFP_Pheasantly
  */
-function queue_posts_for_publication_init() {
-    return Queue_Posts_For_Publication::get_instance();
+function qpfp_pheasantly_init() {
+    return QPFP_Pheasantly::get_instance();
 }
 
-queue_posts_for_publication_init();
+qpfp_pheasantly_init();

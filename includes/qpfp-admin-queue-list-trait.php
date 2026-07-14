@@ -2,7 +2,7 @@
 /**
  * Queued posts calendar and list admin screen.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -19,8 +19,8 @@ trait QPFP_Admin_Queue_List_Trait {
 
         if (empty($posts)) {
             echo '<div class="wrap">';
-            echo '<h1>' . esc_html__('Scheduled Posts', 'queue-posts-for-publication') . '</h1>';
-            echo '<p>' . esc_html__('No posts are currently scheduled for future publication.', 'queue-posts-for-publication') . '</p>';
+            echo '<h1>' . esc_html__('Scheduled Posts', 'pheasantly-queued-publication') . '</h1>';
+            echo '<p>' . esc_html__('No posts are currently scheduled for future publication.', 'pheasantly-queued-publication') . '</p>';
             echo '</div>';
             return;
         }
@@ -50,11 +50,11 @@ trait QPFP_Admin_Queue_List_Trait {
         $current_date = current_time('Y-m-d');
 
         echo '<div class="wrap">';
-        echo '<h1>' . esc_html__('Scheduled Posts', 'queue-posts-for-publication') . '</h1>';
+        echo '<h1>' . esc_html__('Scheduled Posts', 'pheasantly-queued-publication') . '</h1>';
         
         // Add view toggle button
         echo '<div class="qpfp-view-toggle">';
-        echo '<button type="button" class="button" id="qpfp-toggle-view">' . esc_html__('Toggle View', 'queue-posts-for-publication') . '</button>';
+        echo '<button type="button" class="button" id="qpfp-toggle-view">' . esc_html__('Toggle View', 'pheasantly-queued-publication') . '</button>';
         echo '</div>';
 
         // Calendar View

@@ -2,7 +2,7 @@
 /**
  * Core plugin lifecycle, database, admin menu, and debug logging.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -64,8 +64,8 @@ trait QPFP_Plugin_Trait {
     }
     public function add_admin_menu() {
         add_menu_page(
-            __('Publication Slots', 'queue-posts-for-publication'),
-            __('Queue Posts', 'queue-posts-for-publication'),
+            __('Publication Slots', 'pheasantly-queued-publication'),
+            __('Queue Posts', 'pheasantly-queued-publication'),
             'manage_options',
             'queue-posts-slots',
             array($this, 'render_slots_page'),
@@ -75,8 +75,8 @@ trait QPFP_Plugin_Trait {
 
         add_submenu_page(
             'queue-posts-slots',
-            __('Publication Slots', 'queue-posts-for-publication'),
-            __('Publication Slots', 'queue-posts-for-publication'),
+            __('Publication Slots', 'pheasantly-queued-publication'),
+            __('Publication Slots', 'pheasantly-queued-publication'),
             'manage_options',
             'queue-posts-slots',
             array($this, 'render_slots_page')
@@ -84,8 +84,8 @@ trait QPFP_Plugin_Trait {
 
         add_submenu_page(
             'queue-posts-slots',
-            __('Queued Posts', 'queue-posts-for-publication'),
-            __('Queued Posts', 'queue-posts-for-publication'),
+            __('Queued Posts', 'pheasantly-queued-publication'),
+            __('Queued Posts', 'pheasantly-queued-publication'),
             'manage_options',
             'queue-posts-list',
             array($this, 'render_queue_list_page')

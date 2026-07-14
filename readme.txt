@@ -1,4 +1,4 @@
-=== Queue Posts for Publication ===
+=== Pheasantly Queued Publication ===
 Contributors: karol-k
 Tags: posts, scheduling, queue, publication, calendar
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Define a recurring weekly publishing cadence and schedule posts into the next op
 
 == Description ==
 
-Queue Posts for Publication lets editors define a recurring weekly publishing cadence and schedule posts into the next open slot without calculating dates manually.
+Pheasantly Queued Publication lets editors define a recurring weekly publishing cadence and schedule posts into the next open slot without calculating dates manually.
 
 Keep using WordPress' native scheduled posts, but choose publish times from a reusable queue of weekly slots such as "Monday 13:00" or "Friday 09:30".
 

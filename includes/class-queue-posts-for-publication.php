@@ -2,7 +2,7 @@
 /**
  * Main plugin class (composed from includes/ traits).
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 /**
  * Main plugin class.
  */
-class Queue_Posts_For_Publication {
+class QPFP_Pheasantly {
     private const DEBUG_LOGGING = false;
 
     /** @var self|null */

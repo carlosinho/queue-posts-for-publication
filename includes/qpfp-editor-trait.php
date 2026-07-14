@@ -2,7 +2,7 @@
 /**
  * Editor assets and classic queue dropdown markup.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -25,9 +25,9 @@ trait QPFP_Editor_Trait {
         ?>
         <div id="qpfp-queue-dropdown" style="display:none;">
             <div class="qpfp-dropdown-content">
-                <h4><?php echo esc_html__('Select Publication Slot', 'queue-posts-for-publication'); ?></h4>
+                <h4><?php echo esc_html__('Select Publication Slot', 'pheasantly-queued-publication'); ?></h4>
                 <select id="qpfp-slot-select">
-                    <option value=""><?php echo esc_html__('Choose a slot...', 'queue-posts-for-publication'); ?></option>
+                    <option value=""><?php echo esc_html__('Choose a slot...', 'pheasantly-queued-publication'); ?></option>
                     <?php foreach ($formatted_slots as $slot_option) : ?>
                         <option value="<?php echo esc_attr($slot_option['timestamp']); ?>">
                             <?php echo esc_html($slot_option['label']); ?>
@@ -36,10 +36,10 @@ trait QPFP_Editor_Trait {
                 </select>
                 <div class="qpfp-dropdown-actions">
                     <button type="button" class="button button-primary" id="qpfp-confirm-queue">
-                        <?php echo esc_html__('Queue', 'queue-posts-for-publication'); ?>
+                        <?php echo esc_html__('Queue', 'pheasantly-queued-publication'); ?>
                     </button>
                     <button type="button" class="button" id="qpfp-cancel-queue">
-                        <?php echo esc_html__('Cancel', 'queue-posts-for-publication'); ?>
+                        <?php echo esc_html__('Cancel', 'pheasantly-queued-publication'); ?>
                     </button>
                 </div>
             </div>
@@ -81,24 +81,24 @@ trait QPFP_Editor_Trait {
         );
 
         // Set translations
-        wp_set_script_translations('qpfp-block-editor', 'queue-posts-for-publication');
+        wp_set_script_translations('qpfp-block-editor', 'pheasantly-queued-publication');
 
         // Add localized data
         $has_publication_slots = $this->has_publication_slots();
         wp_localize_script('qpfp-block-editor', 'qpfpBlockEditor', array(
             'i18n' => array(
-                'queueButton' => __('Queue for publication', 'queue-posts-for-publication'),
-                'selectSlot' => __('Select Publication Slot', 'queue-posts-for-publication'),
-                'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),
-                'queue' => __('Queue', 'queue-posts-for-publication'),
-                'cancel' => __('Cancel', 'queue-posts-for-publication'),
-                'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
-                'slotConflict' => /* translators: %s: Title of the post currently scheduled in this slot */ __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'queue-posts-for-publication'),
-                'noSlots' => __('No publication slots configured.', 'queue-posts-for-publication'),
-                'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'queue-posts-for-publication'),
-                'manageSlots' => __('Manage publication slots', 'queue-posts-for-publication'),
-                'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
-                'pickSlot' => __('Pick a slot', 'queue-posts-for-publication')
+                'queueButton' => __('Queue for publication', 'pheasantly-queued-publication'),
+                'selectSlot' => __('Select Publication Slot', 'pheasantly-queued-publication'),
+                'chooseSlot' => __('Choose a slot...', 'pheasantly-queued-publication'),
+                'queue' => __('Queue', 'pheasantly-queued-publication'),
+                'cancel' => __('Cancel', 'pheasantly-queued-publication'),
+                'queueError' => __('Failed to queue post.', 'pheasantly-queued-publication'),
+                'slotConflict' => /* translators: %s: Title of the post currently scheduled in this slot */ __('This slot is already taken by "%s". Do you want to reschedule that post and use this slot?', 'pheasantly-queued-publication'),
+                'noSlots' => __('No publication slots configured.', 'pheasantly-queued-publication'),
+                'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'pheasantly-queued-publication'),
+                'manageSlots' => __('Manage publication slots', 'pheasantly-queued-publication'),
+                'queueForNext' => __('Queue for next slot', 'pheasantly-queued-publication'),
+                'pickSlot' => __('Pick a slot', 'pheasantly-queued-publication')
             ),
             'hasPublicationSlots' => $has_publication_slots,
             'manageSlotsUrl' => $has_publication_slots || !current_user_can('manage_options') ? '' : admin_url('admin.php?page=queue-posts-slots'),
@@ -137,21 +137,21 @@ trait QPFP_Editor_Trait {
                 'hasPublicationSlots' => $this->has_publication_slots(),
                 'manageSlotsUrl' => current_user_can('manage_options') ? admin_url('admin.php?page=queue-posts-slots') : '',
                 'i18n' => array(
-                    'queueSectionLabel' => __('Queue for publication:', 'queue-posts-for-publication'),
-                    'edit' => __('Edit', 'queue-posts-for-publication'),
-                    'editQueueOptions' => __('Edit queue options', 'queue-posts-for-publication'),
-                    'cancel' => __('Cancel', 'queue-posts-for-publication'),
-                    'ok' => __('OK', 'queue-posts-for-publication'),
-                    'queueError' => __('Failed to queue post.', 'queue-posts-for-publication'),
-                    'fetchSlotsError' => __('Failed to fetch slots.', 'queue-posts-for-publication'),
-                    'noSlots' => __('No slots available.', 'queue-posts-for-publication'),
-                    'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'queue-posts-for-publication'),
-                    'manageSlots' => __('Manage publication slots', 'queue-posts-for-publication'),
-                    'chooseSlot' => __('Choose a slot...', 'queue-posts-for-publication'),
-                    'pickSlot' => __('Pick a slot', 'queue-posts-for-publication'),
-                    'queueForNext' => __('Queue for next slot', 'queue-posts-for-publication'),
-                    'showListView' => __('Show List View', 'queue-posts-for-publication'),
-                    'showCalendarView' => __('Show Calendar View', 'queue-posts-for-publication')
+                    'queueSectionLabel' => __('Queue for publication:', 'pheasantly-queued-publication'),
+                    'edit' => __('Edit', 'pheasantly-queued-publication'),
+                    'editQueueOptions' => __('Edit queue options', 'pheasantly-queued-publication'),
+                    'cancel' => __('Cancel', 'pheasantly-queued-publication'),
+                    'ok' => __('OK', 'pheasantly-queued-publication'),
+                    'queueError' => __('Failed to queue post.', 'pheasantly-queued-publication'),
+                    'fetchSlotsError' => __('Failed to fetch slots.', 'pheasantly-queued-publication'),
+                    'noSlots' => __('No slots available.', 'pheasantly-queued-publication'),
+                    'configureSlotsFirst' => __('Define publication slots before queueing posts.', 'pheasantly-queued-publication'),
+                    'manageSlots' => __('Manage publication slots', 'pheasantly-queued-publication'),
+                    'chooseSlot' => __('Choose a slot...', 'pheasantly-queued-publication'),
+                    'pickSlot' => __('Pick a slot', 'pheasantly-queued-publication'),
+                    'queueForNext' => __('Queue for next slot', 'pheasantly-queued-publication'),
+                    'showListView' => __('Show List View', 'pheasantly-queued-publication'),
+                    'showCalendarView' => __('Show Calendar View', 'pheasantly-queued-publication')
                 )
             ));
         }
@@ -175,8 +175,8 @@ trait QPFP_Editor_Trait {
 
             wp_localize_script('qpfp-calendar-view', 'qpfpAdmin', array(
                 'i18n' => array(
-                    'showListView' => __('Show List View', 'queue-posts-for-publication'),
-                    'showCalendarView' => __('Show Calendar View', 'queue-posts-for-publication')
+                    'showListView' => __('Show List View', 'pheasantly-queued-publication'),
+                    'showCalendarView' => __('Show Calendar View', 'pheasantly-queued-publication')
                 )
             ));
         }

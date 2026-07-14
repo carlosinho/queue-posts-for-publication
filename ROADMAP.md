@@ -44,8 +44,12 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
     - Occupancy map via `get_taken_slot_datetimes()` (one `get_posts()` for all `future` posts; keys from `post_date`).
     - Server code under `includes/` (`Queue_Posts_For_Publication` + traits); bootstrap in `queue-posts-for-publication.php`; `QPFP_PLUGIN_FILE` for activation and textdomain.
 
-### v0.40
-- [ ] WordPress.org rollout.
+### v0.40 — WordPress.org release (Queue Posts for Publication → Easy Publication Queue → Pheasantly Queued Publication)
+- [ ] WordPress.org submission and rollout.
+- [ ] Rename for Plugin Directory review: display name **Pheasantly Queued Publication**, slug `pheasantly-queued-publication` (was **Easy Publication Queue** / `easy-publication-queue`, and earlier **Queue Posts for Publication** / `queue-posts-for-publication`).
+- [ ] Slug-related updates in v0.40 only: bootstrap `pheasantly-queued-publication.php`, text domain `pheasantly-queued-publication`, REST namespace `pheasantly-queued-publication/v1`, `languages/pheasantly-queued-publication.pot`.
+- [ ] Review fixes: `manage_options` checks on slot handlers; server-side rejection of queueing `publish` / `future` / `trash` / `auto-draft` posts.
+- [ ] WordPress.org listing assets in `.wordpress-org/`; deploy workflow targets slug `pheasantly-queued-publication`.
 
 ### v0.50
 - [ ] Add automatic reshuffling.

@@ -2,7 +2,7 @@
 /**
  * Publication slots admin screen.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
@@ -28,7 +28,7 @@ trait QPFP_Admin_Slots_Trait {
         $days = $this->get_weekday_labels();
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html__('Publication Slots', 'queue-posts-for-publication'); ?></h1>
+            <h1><?php echo esc_html__('Publication Slots', 'pheasantly-queued-publication'); ?></h1>
             
             <?php settings_errors('qpfp_messages'); ?>
             
@@ -36,10 +36,10 @@ trait QPFP_Admin_Slots_Trait {
                 <?php wp_nonce_field('qpfp_add_slot', 'qpfp_add_slot_nonce'); ?>
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><?php echo esc_html__('Add New Slot', 'queue-posts-for-publication'); ?></th>
+                        <th scope="row"><?php echo esc_html__('Add New Slot', 'pheasantly-queued-publication'); ?></th>
                         <td>
                             <select name="day_of_week" required>
-                                <option value=""><?php echo esc_html__('Select Day', 'queue-posts-for-publication'); ?></option>
+                                <option value=""><?php echo esc_html__('Select Day', 'pheasantly-queued-publication'); ?></option>
                                 <?php
                                 foreach ($days as $value => $label) {
                                     echo '<option value="' . esc_attr($value) . '">' . esc_html($label) . '</option>';
@@ -47,22 +47,22 @@ trait QPFP_Admin_Slots_Trait {
                                 ?>
                             </select>
                             <input type="time" name="time_of_day" required>
-                            <input type="submit" name="qpfp_add_slot" class="button button-primary" value="<?php echo esc_attr__('Add Slot', 'queue-posts-for-publication'); ?>">
+                            <input type="submit" name="qpfp_add_slot" class="button button-primary" value="<?php echo esc_attr__('Add Slot', 'pheasantly-queued-publication'); ?>">
                         </td>
                     </tr>
                 </table>
             </form>
 
-            <h2><?php echo esc_html__('Current Slots', 'queue-posts-for-publication'); ?></h2>
+            <h2><?php echo esc_html__('Current Slots', 'pheasantly-queued-publication'); ?></h2>
             <?php if (empty($slots)) : ?>
-                <p><?php echo esc_html__('No publication slots configured yet.', 'queue-posts-for-publication'); ?></p>
+                <p><?php echo esc_html__('No publication slots configured yet.', 'pheasantly-queued-publication'); ?></p>
             <?php else : ?>
                 <table class="wp-list-table widefat fixed striped">
                     <thead>
                         <tr>
-                            <th><?php echo esc_html__('Day', 'queue-posts-for-publication'); ?></th>
-                            <th><?php echo esc_html__('Time', 'queue-posts-for-publication'); ?></th>
-                            <th><?php echo esc_html__('Actions', 'queue-posts-for-publication'); ?></th>
+                            <th><?php echo esc_html__('Day', 'pheasantly-queued-publication'); ?></th>
+                            <th><?php echo esc_html__('Time', 'pheasantly-queued-publication'); ?></th>
+                            <th><?php echo esc_html__('Actions', 'pheasantly-queued-publication'); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +80,7 @@ trait QPFP_Admin_Slots_Trait {
                                     <form method="post" action="<?php echo esc_url(admin_url('admin.php?page=queue-posts-slots')); ?>" style="display:inline;">
                                         <?php wp_nonce_field('qpfp_delete_slot', 'qpfp_delete_slot_nonce'); ?>
                                         <input type="hidden" name="slot_id" value="<?php echo esc_attr($slot->id); ?>">
-                                        <input type="submit" name="qpfp_delete_slot" class="button button-small" value="<?php echo esc_attr__('Delete', 'queue-posts-for-publication'); ?>" onclick="return confirm('<?php echo esc_js(__('Are you sure you want to delete this slot?', 'queue-posts-for-publication')); ?>');">
+                                        <input type="submit" name="qpfp_delete_slot" class="button button-small" value="<?php echo esc_attr__('Delete', 'pheasantly-queued-publication'); ?>" onclick="return confirm('<?php echo esc_js(__('Are you sure you want to delete this slot?', 'pheasantly-queued-publication')); ?>');">
                                     </form>
                                 </td>
                             </tr>
@@ -102,7 +102,7 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_forbidden',
-                __('You do not have permission to manage publication slots.', 'queue-posts-for-publication'),
+                __('You do not have permission to manage publication slots.', 'pheasantly-queued-publication'),
                 'error'
             );
             return;
@@ -112,7 +112,7 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_missing_data',
-                __('Please select both day and time.', 'queue-posts-for-publication'),
+                __('Please select both day and time.', 'pheasantly-queued-publication'),
                 'error'
             );
             return;
@@ -125,7 +125,7 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_invalid_slot',
-                __('Invalid day or time format.', 'queue-posts-for-publication'),
+                __('Invalid day or time format.', 'pheasantly-queued-publication'),
                 'error'
             );
             return;
@@ -152,7 +152,7 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_duplicate_slot',
-                __('That publication slot already exists.', 'queue-posts-for-publication'),
+                __('That publication slot already exists.', 'pheasantly-queued-publication'),
                 'error'
             );
             return;
@@ -181,14 +181,14 @@ trait QPFP_Admin_Slots_Trait {
                 'qpfp_messages',
                 'qpfp_db_error',
                 /* translators: %s: Database error message */
-                sprintf(__('Failed to add slot. Error: %s', 'queue-posts-for-publication'), $wpdb->last_error),
+                sprintf(__('Failed to add slot. Error: %s', 'pheasantly-queued-publication'), $wpdb->last_error),
                 'error'
             );
         } else {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_success',
-                __('Slot added successfully.', 'queue-posts-for-publication'),
+                __('Slot added successfully.', 'pheasantly-queued-publication'),
                 'success'
             );
         }
@@ -204,7 +204,7 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_forbidden',
-                __('You do not have permission to manage publication slots.', 'queue-posts-for-publication'),
+                __('You do not have permission to manage publication slots.', 'pheasantly-queued-publication'),
                 'error'
             );
             return;
@@ -228,14 +228,14 @@ trait QPFP_Admin_Slots_Trait {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_db_error',
-                __('Failed to delete slot.', 'queue-posts-for-publication'),
+                __('Failed to delete slot.', 'pheasantly-queued-publication'),
                 'error'
             );
         } else {
             add_settings_error(
                 'qpfp_messages',
                 'qpfp_success',
-                __('Slot deleted successfully.', 'queue-posts-for-publication'),
+                __('Slot deleted successfully.', 'pheasantly-queued-publication'),
                 'success'
             );
         }

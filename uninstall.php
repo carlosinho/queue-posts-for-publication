@@ -2,7 +2,7 @@
 /**
  * Uninstall cleanup.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('WP_UNINSTALL_PLUGIN') || exit;

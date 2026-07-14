@@ -2,14 +2,14 @@
 /**
  * REST and AJAX endpoints for editor queueing.
  *
- * @package Queue_Posts_For_Publication
+ * @package QPFP_Pheasantly
  */
 
 defined('ABSPATH') || exit;
 
 trait QPFP_Api_Trait {
     public function register_rest_routes() {
-        register_rest_route('queue-posts-for-publication/v1', '/slots', array(
+        register_rest_route('pheasantly-queued-publication/v1', '/slots', array(
             'methods' => 'GET',
             'callback' => array($this, 'get_slots_rest'),
             'permission_callback' => function() {
@@ -17,7 +17,7 @@ trait QPFP_Api_Trait {
             }
         ));
 
-        register_rest_route('queue-posts-for-publication/v1', '/queue', array(
+        register_rest_route('pheasantly-queued-publication/v1', '/queue', array(
             'methods' => 'POST',
             'callback' => array($this, 'queue_post_rest'),
             'permission_callback' => function() {
@@ -95,7 +95,7 @@ trait QPFP_Api_Trait {
         check_ajax_referer('qpfp-queue-nonce', '_ajax_nonce');
 
         if (!current_user_can('edit_posts')) {
-            wp_send_json_error(__('Permission denied.', 'queue-posts-for-publication'));
+            wp_send_json_error(__('Permission denied.', 'pheasantly-queued-publication'));
             return;
         }
 
@@ -116,7 +116,7 @@ trait QPFP_Api_Trait {
         check_ajax_referer('qpfp-queue-nonce', '_ajax_nonce');
 
         if (!current_user_can('edit_posts')) {
-            wp_send_json_error(__('Permission denied.', 'queue-posts-for-publication'));
+            wp_send_json_error(__('Permission denied.', 'pheasantly-queued-publication'));
             return;
         }
 
@@ -139,7 +139,7 @@ trait QPFP_Api_Trait {
         }
 
         if (!$post_id) {
-            wp_send_json_error(__('Invalid post ID.', 'queue-posts-for-publication'));
+            wp_send_json_error(__('Invalid post ID.', 'pheasantly-queued-publication'));
             return;
         }
 

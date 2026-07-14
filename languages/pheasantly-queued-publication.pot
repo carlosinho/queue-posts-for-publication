@@ -2,8 +2,8 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Queue Posts for Publication 0.32\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/queue-posts-for-publication\n"
+"Project-Id-Version: Pheasantly Queued Publication 0.40\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pheasantly-queued-publication\n"
 "POT-Creation-Date: 2026-06-09T21:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -11,26 +11,26 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Domain: queue-posts-for-publication\n"
+"X-Domain: pheasantly-queued-publication\n"
 
 #. Plugin Name of the plugin
-#: queue-posts-for-publication.php
-msgid "Queue Posts for Publication"
+#: pheasantly-queued-publication.php
+msgid "Pheasantly Queued Publication"
 msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-#: queue-posts-for-publication.php
+#: pheasantly-queued-publication.php
 msgid "https://wpwork.shop/"
 msgstr ""
 
 #. Description of the plugin
-#: queue-posts-for-publication.php
+#: pheasantly-queued-publication.php
 msgid "A plugin to queue and schedule posts for future publication on the next available slot."
 msgstr ""
 
 #. Author of the plugin
-#: queue-posts-for-publication.php
+#: pheasantly-queued-publication.php
 msgid "Karol K"
 msgstr ""
 
@@ -101,29 +101,29 @@ msgstr ""
 msgid "Please select both day and time."
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:118
+#: includes/qpfp-admin-slots-trait.php:128
 msgid "Invalid day or time format."
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:145
+#: includes/qpfp-admin-slots-trait.php:155
 msgid "That publication slot already exists."
 msgstr ""
 
 #. translators: %s: Database error message
-#: includes/qpfp-admin-slots-trait.php:174
+#: includes/qpfp-admin-slots-trait.php:184
 #, php-format
 msgid "Failed to add slot. Error: %s"
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:181
+#: includes/qpfp-admin-slots-trait.php:191
 msgid "Slot added successfully."
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:211
+#: includes/qpfp-admin-slots-trait.php:231
 msgid "Failed to delete slot."
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:218
+#: includes/qpfp-admin-slots-trait.php:238
 msgid "Slot deleted successfully."
 msgstr ""
 

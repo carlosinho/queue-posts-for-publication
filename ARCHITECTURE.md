@@ -22,9 +22,9 @@ That keeps publication compatible with WordPress' existing scheduled-post behavi
 
 ### Bootstrap and orchestration
 
-`queue-posts-for-publication.php` loads `includes/` and calls `queue_posts_for_publication_init()`.
+`pheasantly-queued-publication.php` loads `includes/` and calls `qpfp_pheasantly_init()`.
 
-`includes/class-queue-posts-for-publication.php` defines the singleton `Queue_Posts_For_Publication`, registers hooks in `init_hooks()`, and composes these traits:
+`includes/class-queue-posts-for-publication.php` defines the singleton `QPFP_Pheasantly`, registers hooks in `init_hooks()`, and composes these traits:
 
 | Trait | Responsibility |
 | --- | --- |
@@ -166,7 +166,7 @@ Classic editor flow:
 
 Block editor flow:
 
-- `js/block-editor.js` calls `GET /wp-json/wp/v2/qpfp/slots` and `POST /wp-json/wp/v2/qpfp/queue`
+- `js/block-editor.js` calls `GET /wp-json/pheasantly-queued-publication/v1/slots` and `POST /wp-json/pheasantly-queued-publication/v1/queue`
 - PHP handlers: `get_slots_rest()`, `queue_post_rest()`
 
 Shared scheduling in `QPFP_Scheduler_Trait` (used by both transports):
@@ -241,8 +241,8 @@ The plugin has two API layers because it supports both editor experiences.
 
 Routes:
 
-- `GET /wp-json/wp/v2/qpfp/slots`
-- `POST /wp-json/wp/v2/qpfp/queue`
+- `GET /wp-json/pheasantly-queued-publication/v1/slots`
+- `POST /wp-json/pheasantly-queued-publication/v1/queue`
 
 Characteristics:
 
