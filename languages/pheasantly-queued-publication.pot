@@ -1,27 +1,22 @@
-# Copyright (C) 2025 Karol K
+# Copyright (C) 2026 Karol K
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Pheasantly Queued Publication 0.40\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pheasantly-queued-publication\n"
-"POT-Creation-Date: 2026-06-09T21:14+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-14T16:39:19+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pheasantly-queued-publication\n"
 
 #. Plugin Name of the plugin
 #: pheasantly-queued-publication.php
 msgid "Pheasantly Queued Publication"
-msgstr ""
-
-#. Plugin URI of the plugin
-#. Author URI of the plugin
-#: pheasantly-queued-publication.php
-msgid "https://wpwork.shop/"
 msgstr ""
 
 #. Description of the plugin
@@ -32,6 +27,11 @@ msgstr ""
 #. Author of the plugin
 #: pheasantly-queued-publication.php
 msgid "Karol K"
+msgstr ""
+
+#. Author URI of the plugin
+#: pheasantly-queued-publication.php
+msgid "https://wpwork.shop/"
 msgstr ""
 
 #: includes/qpfp-admin-queue-list-trait.php:22
@@ -47,8 +47,10 @@ msgstr ""
 msgid "Toggle View"
 msgstr ""
 
-#: includes/qpfp-admin-slots-trait.php:31 includes/qpfp-plugin-trait.php:78
-#: includes/qpfp-plugin-trait.php:89 includes/qpfp-plugin-trait.php:90
+#: includes/qpfp-admin-slots-trait.php:31
+#: includes/qpfp-plugin-trait.php:67
+#: includes/qpfp-plugin-trait.php:78
+#: includes/qpfp-plugin-trait.php:79
 msgid "Publication Slots"
 msgstr ""
 
@@ -127,36 +129,34 @@ msgstr ""
 msgid "Slot deleted successfully."
 msgstr ""
 
-#: includes/qpfp-api-trait.php:98 includes/qpfp-api-trait.php:119
+#: includes/qpfp-api-trait.php:98
+#: includes/qpfp-api-trait.php:119
 msgid "Permission denied."
 msgstr ""
 
-#: includes/qpfp-api-trait.php:142 includes/qpfp-scheduler-trait.php:254
+#: includes/qpfp-api-trait.php:142
+#: includes/qpfp-scheduler-trait.php:254
 msgid "Invalid post ID."
 msgstr ""
 
-#: includes/qpfp-scheduler-trait.php:258
-msgid "You cannot edit this post."
-msgstr ""
-
-#: includes/qpfp-scheduler-trait.php:265
-msgid "This post cannot be queued for publication."
-msgstr ""
-
-#: includes/qpfp-editor-trait.php:28 includes/qpfp-editor-trait.php:91
+#: includes/qpfp-editor-trait.php:28
+#: includes/qpfp-editor-trait.php:91
 msgid "Select Publication Slot"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:30 includes/qpfp-editor-trait.php:92
+#: includes/qpfp-editor-trait.php:30
+#: includes/qpfp-editor-trait.php:92
 #: includes/qpfp-editor-trait.php:150
 msgid "Choose a slot..."
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:39 includes/qpfp-editor-trait.php:93
+#: includes/qpfp-editor-trait.php:39
+#: includes/qpfp-editor-trait.php:93
 msgid "Queue"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:42 includes/qpfp-editor-trait.php:94
+#: includes/qpfp-editor-trait.php:42
+#: includes/qpfp-editor-trait.php:94
 #: includes/qpfp-editor-trait.php:143
 msgid "Cancel"
 msgstr ""
@@ -165,35 +165,40 @@ msgstr ""
 msgid "Queue for publication"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:95 includes/qpfp-editor-trait.php:145
+#: includes/qpfp-editor-trait.php:95
+#: includes/qpfp-editor-trait.php:145
 msgid "Failed to queue post."
 msgstr ""
 
 #. translators: %s: Title of the post currently scheduled in this slot
 #: includes/qpfp-editor-trait.php:96
 #, php-format
-msgid ""
-"This slot is already taken by \"%s\". Do you want to reschedule that post "
-"and use this slot?"
+msgid "This slot is already taken by \"%s\". Do you want to reschedule that post and use this slot?"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:97 includes/qpfp-scheduler-trait.php:229
+#. translators: %s: Title of the post currently scheduled in this slot
+#: includes/qpfp-editor-trait.php:97
+#: includes/qpfp-scheduler-trait.php:229
 msgid "No publication slots configured."
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:98 includes/qpfp-editor-trait.php:148
+#: includes/qpfp-editor-trait.php:98
+#: includes/qpfp-editor-trait.php:148
 msgid "Define publication slots before queueing posts."
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:99 includes/qpfp-editor-trait.php:149
+#: includes/qpfp-editor-trait.php:99
+#: includes/qpfp-editor-trait.php:149
 msgid "Manage publication slots"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:100 includes/qpfp-editor-trait.php:152
+#: includes/qpfp-editor-trait.php:100
+#: includes/qpfp-editor-trait.php:152
 msgid "Queue for next slot"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:101 includes/qpfp-editor-trait.php:151
+#: includes/qpfp-editor-trait.php:101
+#: includes/qpfp-editor-trait.php:151
 msgid "Pick a slot"
 msgstr ""
 
@@ -221,19 +226,22 @@ msgstr ""
 msgid "No slots available."
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:153 includes/qpfp-editor-trait.php:178
+#: includes/qpfp-editor-trait.php:153
+#: includes/qpfp-editor-trait.php:178
 msgid "Show List View"
 msgstr ""
 
-#: includes/qpfp-editor-trait.php:154 includes/qpfp-editor-trait.php:179
+#: includes/qpfp-editor-trait.php:154
+#: includes/qpfp-editor-trait.php:179
 msgid "Show Calendar View"
 msgstr ""
 
-#: includes/qpfp-plugin-trait.php:79
+#: includes/qpfp-plugin-trait.php:68
 msgid "Queue Posts"
 msgstr ""
 
-#: includes/qpfp-plugin-trait.php:98 includes/qpfp-plugin-trait.php:99
+#: includes/qpfp-plugin-trait.php:87
+#: includes/qpfp-plugin-trait.php:88
 msgid "Queued Posts"
 msgstr ""
 
@@ -267,4 +275,12 @@ msgstr ""
 
 #: includes/qpfp-scheduler-trait.php:237
 msgid "Selected slot not available."
+msgstr ""
+
+#: includes/qpfp-scheduler-trait.php:258
+msgid "You cannot edit this post."
+msgstr ""
+
+#: includes/qpfp-scheduler-trait.php:265
+msgid "This post cannot be queued for publication."
 msgstr ""
