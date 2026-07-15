@@ -1,14 +1,16 @@
 name: Deploy to WordPress.org
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - released
 
 jobs:
-  tag:
-    name: New tag
+  deploy:
+    name: Deploy release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -19,7 +21,15 @@ jobs:
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
           generate-zip: true
+          dry-run: false
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: pheasantly-queued-publication
+
+      - name: Upload plugin ZIP to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.deploy.outputs.zip-path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

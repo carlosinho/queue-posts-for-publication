@@ -1,6 +1,6 @@
 === Pheasantly Queued Publication ===
 Contributors: karol-k
-Tags: post schedule, queue, publication, editorial calendar, scheduled posts
+Tags: queue, publication, editorial calendar, schedule posts, schedule
 Requires at least: 5.0
 Tested up to: 7.0.1
 Stable tag: 0.40
@@ -243,8 +243,8 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 
 == Screenshots ==
 
-1. Publication Slots - screen for configuring publication slots
-2. Queued Posts - calendar view
+1. Publication Slots – screen for configuring publication slots
+2. Queued Posts – calendar view
 3. The main post scheduling section when editing a post
 
 == Changelog ==
