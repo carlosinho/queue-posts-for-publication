@@ -12,11 +12,11 @@ Create a recurring publishing schedule (weekly editorial calendar) and queue pos
 
 == Description ==
 
-Pheasantly Queued Publication is a WordPress post queue for editors who want to schedule posts on a recurring publishing queue without calculating dates manually. 
+Pheasantly Queued Publication lets you queue posts into recurring weekly publication slots.
 
-Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot.
+Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot. 
 
-Keep using WordPress' native scheduled posts, but choose publish times from reusable weekly slots such as "Monday 13:00" or "Friday 09:30". This gives your content publishing schedule a predictable rhythm while keeping WordPress as the source of truth for publication.
+Uses WordPress' native scheduled posts, but lets you choose publish times from reusable weekly slots such as "Monday 13:00" or "Friday 09:30". This gives your content publishing schedule a predictable rhythm while keeping WordPress as the source of truth for publication.
 
 The plugin does not create a separate publication queue of post records. It stores reusable slot definitions in one custom table and stores actual scheduled-post state in WordPress core posts with `post_status = future`. WordPress core handles publication in the normal scheduled-post way.
 
@@ -30,6 +30,7 @@ The plugin does not create a separate publication queue of post records. It stor
 * Queue a post into the next available slot
 * Pick one of the next available upcoming slots when you need to schedule blog posts in advance
 * Occupancy avoidance: datetimes already used by other scheduled posts are not offered
+* A WordPress post queue for editors who want to schedule posts on a recurring publishing queue without calculating dates manually
 
 = Getting started =
 

@@ -1,0 +1,25 @@
+name: Update WordPress.org assets and readme
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update assets and readme
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update WordPress.org assets and readme
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: pheasantly-queued-publication
+          ASSETS_DIR: .wordpress-org
+          README_NAME: readme.txt
