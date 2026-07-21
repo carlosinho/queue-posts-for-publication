@@ -253,6 +253,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 
 == Changelog ==
 
+= 0.42 =
+* UI improvements.
+
 = 0.40 =
 * Initial WordPress.org release.
 * Queueing to the next slot now fails clearly when no publication slots have been configured yet.
@@ -267,6 +270,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 * Scheduling uses native WordPress future posts.
 
 == Upgrade Notice ==
+
+= 0.42 =
+Tweaks UI to be more smooth.
 
 = 0.40 =
 Initial WordPress.org release.
