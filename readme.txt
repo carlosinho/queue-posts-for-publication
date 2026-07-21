@@ -3,7 +3,7 @@ Contributors: karol-k
 Tags: queue, publication, editorial calendar, schedule posts, schedule
 Requires at least: 5.0
 Tested up to: 7.0.2
-Stable tag: 0.41
+Stable tag: 0.42
 Requires PHP: 7.4
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

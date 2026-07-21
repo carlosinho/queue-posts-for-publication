@@ -82,6 +82,27 @@ trait QPFP_Plugin_Trait {
         <?php
     }
 
+    /**
+     * Get the admin menu icon as an SVG data URI.
+     *
+     * @return string Menu icon data URI or fallback Dashicon class.
+     */
+    private function get_admin_menu_icon() {
+        $icon_path = QPFP_PLUGIN_DIR . 'images/pheasant-icon.svg';
+
+        if (!is_readable($icon_path)) {
+            return 'dashicons-clock';
+        }
+
+        $icon_svg = file_get_contents($icon_path);
+
+        if (false === $icon_svg) {
+            return 'dashicons-clock';
+        }
+
+        return 'data:image/svg+xml;base64,' . base64_encode($icon_svg);
+    }
+
     public function add_admin_menu() {
         add_menu_page(
             __('Publication Slots', 'pheasantly-queued-publication'),
@@ -89,7 +110,7 @@ trait QPFP_Plugin_Trait {
             'manage_options',
             'queue-posts-slots',
             array($this, 'render_slots_page'),
-            'dashicons-clock',
+            $this->get_admin_menu_icon(),
             30
         );
 

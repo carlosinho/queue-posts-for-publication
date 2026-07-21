@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Pheasantly Queued Publication
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.41
+ * Version: 0.42
  * Requires at least: 5.0
  * Requires PHP: 7.4
  * Author: Karol K
@@ -15,7 +15,7 @@
 
 defined('ABSPATH') || exit;
 
-define('QPFP_VERSION', '0.41');
+define('QPFP_VERSION', '0.42');
 define('QPFP_PLUGIN_FILE', __FILE__);
 define('QPFP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('QPFP_PLUGIN_URL', plugin_dir_url(__FILE__));
