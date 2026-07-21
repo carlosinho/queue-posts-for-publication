@@ -2,8 +2,8 @@
 Contributors: karol-k
 Tags: queue, publication, editorial calendar, schedule posts, schedule
 Requires at least: 5.0
-Tested up to: 7.0.1
-Stable tag: 0.40
+Tested up to: 7.0.2
+Stable tag: 0.41
 Requires PHP: 7.4
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -15,6 +15,8 @@ Create a recurring publishing schedule (weekly editorial calendar) and queue pos
 Pheasantly Queued Publication lets you queue posts into recurring weekly publication slots.
 
 Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot. 
+
+= Fine print =
 
 Uses WordPress' native scheduled posts, but lets you choose publish times from reusable weekly slots such as "Monday 13:00" or "Friday 09:30". This gives your content publishing schedule a predictable rhythm while keeping WordPress as the source of truth for publication.
 
@@ -43,7 +45,7 @@ The plugin does not create a separate publication queue of post records. It stor
 
 = Usage scenarios = 
 
-**How to create a weekly publishing schedule**
+📅 **How to create a weekly publishing schedule**
 
 Go to **Queue Posts -> Publication Slots**. Select a weekday and time, then click **Add Slot**. Repeat this for every regular publishing time.
 
@@ -51,37 +53,37 @@ Each row is a repeating weekly pattern rather than a one-time event. For example
 
 You can add multiple times on the same day, such as Tuesday at 9:00 AM and Tuesday at 3:00 PM. You cannot add the exact same weekday and time twice.
 
-**How to queue a post into the next open slot**
+➕ **How to queue a post into the next open slot**
 
 Open an unpublished, unscheduled post in the block editor or classic editor. Open the **Queue for publication** options and select **Queue for next slot**.
 
 Pheasantly finds the earliest configured time that is in the future and is not already occupied. The post then becomes a normal WordPress scheduled post.
 
-**How to choose a specific upcoming slot**
+🎯 **How to choose a specific upcoming slot**
 
 Open the queue options and choose **Pick a slot**. Select a date and time, then confirm your choice.
 
 The picker shows up to 10 upcoming free dates. Occupied dates are omitted. If the date you want is absent, another post may already be scheduled for that exact time, or the date may fall beyond the choices currently shown.
 
-**How to queue several drafts**
+📚 **How to queue several drafts**
 
 Queue ready drafts in the order in which you want them published. Use **Queue for next slot** on each draft.
 
 After the first draft takes the earliest free date, the next draft takes the next free date, and so on. Review the final order under **Queue Posts -> Queued Posts**.
 
-**How to review upcoming publications**
+👀 **How to review upcoming publications**
 
 Go to **Queue Posts -> Queued Posts**. Use the calendar to see your schedule across months, or use **Toggle View** to switch to the grouped list. Smaller screens use the list view by default.
 
 Post titles link to their editor screens. The overview includes every future post on the site, including posts scheduled manually or by another plugin.
 
-**How to change or remove a queued post**
+✏️ **How to change or remove a queued post**
 
 A queued post is an ordinary WordPress scheduled post. Open it and use the standard WordPress scheduling controls to change its publication date and time.
 
 To remove it from the schedule, change it back to a non-scheduled status such as Draft and save it. You can queue it again later.
 
-**How to change the recurring schedule**
+🔁 **How to change the recurring schedule**
 
 Go to **Queue Posts -> Publication Slots** and delete a recurring time you no longer need. Add a replacement slot if required.
 
@@ -246,7 +248,8 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 
 1. Publication Slots – screen for configuring publication slots
 2. Queued Posts – calendar view
-3. The main post scheduling section when editing a post
+3. Schedule post for next slot (block editor)
+4. Pick a slot from the list (classic editor)
 
 == Changelog ==
 

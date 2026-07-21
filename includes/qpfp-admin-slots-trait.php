@@ -28,7 +28,7 @@ trait QPFP_Admin_Slots_Trait {
         $days = $this->get_weekday_labels();
         ?>
         <div class="wrap">
-            <h1><?php echo esc_html__('Publication Slots', 'pheasantly-queued-publication'); ?></h1>
+            <?php $this->render_admin_page_heading(__('Publication Slots', 'pheasantly-queued-publication')); ?>
             
             <?php settings_errors('qpfp_messages'); ?>
             

@@ -62,6 +62,26 @@ trait QPFP_Plugin_Trait {
         }
         return $lock;
     }
+
+    /**
+     * Render an admin page heading with the plugin logo.
+     *
+     * @param string $title Page title.
+     */
+    protected function render_admin_page_heading($title) {
+        ?>
+        <h1 class="qpfp-page-title">
+            <span class="qpfp-page-title-text"><?php echo esc_html($title); ?></span>
+            <img
+                src="<?php echo esc_url(QPFP_PLUGIN_URL . 'images/pheasants-queue.png'); ?>"
+                alt="Pheasantly Queued Publication"
+                class="qpfp-page-title-logo"
+                height="40"
+            />
+        </h1>
+        <?php
+    }
+
     public function add_admin_menu() {
         add_menu_page(
             __('Publication Slots', 'pheasantly-queued-publication'),

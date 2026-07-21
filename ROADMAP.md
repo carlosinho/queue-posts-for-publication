@@ -47,7 +47,7 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
 ### v0.40 — WordPress.org release (Queue Posts for Publication → Easy Publication Queue → Pheasantly Queued Publication)
 - [x] WordPress.org submission.
 - [x] Rename for Plugin Directory review: display name **Pheasantly Queued Publication**, slug `pheasantly-queued-publication` (was **Queue Posts for Publication** / `queue-posts-for-publication`). Change this name in all related places - slugs, text domain, etc.
-- [ ] Deploy to WordPress.org SVN.
+- [x] Deploy to WordPress.org SVN.
 
 ### v0.50
 - [ ] Add automatic reshuffling.

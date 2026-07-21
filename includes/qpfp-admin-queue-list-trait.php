@@ -19,7 +19,7 @@ trait QPFP_Admin_Queue_List_Trait {
 
         if (empty($posts)) {
             echo '<div class="wrap">';
-            echo '<h1>' . esc_html__('Scheduled Posts', 'pheasantly-queued-publication') . '</h1>';
+            $this->render_admin_page_heading(__('Queued Posts', 'pheasantly-queued-publication'));
             echo '<p>' . esc_html__('No posts are currently scheduled for future publication.', 'pheasantly-queued-publication') . '</p>';
             echo '</div>';
             return;
@@ -50,7 +50,7 @@ trait QPFP_Admin_Queue_List_Trait {
         $current_date = current_time('Y-m-d');
 
         echo '<div class="wrap">';
-        echo '<h1>' . esc_html__('Scheduled Posts', 'pheasantly-queued-publication') . '</h1>';
+        $this->render_admin_page_heading(__('Queued Posts', 'pheasantly-queued-publication'));
         
         // Add view toggle button
         echo '<div class="qpfp-view-toggle">';

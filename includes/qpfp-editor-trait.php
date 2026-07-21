@@ -156,15 +156,23 @@ trait QPFP_Editor_Trait {
             ));
         }
 
-        // Load calendar-view.js only on the queue list page
-        if ($hook === 'queue-posts_page_queue-posts-list') {
+        $plugin_admin_hooks = array(
+            'toplevel_page_queue-posts-slots',
+            'queue-posts_page_queue-posts-slots',
+            'queue-posts_page_queue-posts-list',
+        );
+
+        if (in_array($hook, $plugin_admin_hooks, true)) {
             wp_enqueue_style(
                 'qpfp-admin',
                 QPFP_PLUGIN_URL . 'css/admin.css',
                 array(),
                 QPFP_VERSION
             );
+        }
 
+        // Load calendar-view.js only on the queue list page
+        if ($hook === 'queue-posts_page_queue-posts-list') {
             wp_enqueue_script(
                 'qpfp-calendar-view',
                 QPFP_PLUGIN_URL . 'js/calendar-view.js',
@@ -179,16 +187,6 @@ trait QPFP_Editor_Trait {
                     'showCalendarView' => __('Show Calendar View', 'pheasantly-queued-publication')
                 )
             ));
-        }
-
-        // Load only admin.css on slots page since no JS is needed
-        if ($hook === 'queue-posts_page_queue-posts-slots') {
-            wp_enqueue_style(
-                'qpfp-admin',
-                QPFP_PLUGIN_URL . 'css/admin.css',
-                array(),
-                QPFP_VERSION
-            );
         }
     }
 }

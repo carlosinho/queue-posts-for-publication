@@ -471,4 +471,22 @@ body.wp-admin.admin-color-dark .qpfp-dropdown-content {
     color: #646970;
     font-size: 12px;
     margin-top: 4px;
+}
+
+/* Admin page headings */
+.wrap h1.qpfp-page-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qpfp-page-title-text {
+    line-height: 1.2;
+}
+
+.qpfp-page-title-logo {
+    display: block;
+    height: 40px;
+    width: auto;
+    flex-shrink: 0;
 } 
