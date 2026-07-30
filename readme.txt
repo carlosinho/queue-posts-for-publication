@@ -14,7 +14,9 @@ Create a recurring publishing schedule (weekly editorial calendar) and queue pos
 
 Pheasantly Queued Publication lets you queue posts into recurring weekly publication slots.
 
-Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot. 
+Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot.
+
+https://www.youtube.com/watch?v=9w5P-ffQmqg
 
 = Fine print =
 
@@ -43,7 +45,7 @@ The plugin does not create a separate publication queue of post records. It stor
 5. Choose **Queue for next slot** or **Pick a slot**. This will queue for the next available slot or your selected specific upcoming slot.
 6. Review scheduled posts at **Queue Posts -> Queued Posts** in calendar or list view. The post scheduling calendar shows every future post on the site, not only posts queued through this plugin.
 
-= Usage scenarios = 
+= Usage scenarios =
 
 📅 **How to create a weekly publishing schedule**
 
