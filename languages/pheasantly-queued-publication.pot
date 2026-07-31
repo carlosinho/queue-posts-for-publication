@@ -2,21 +2,21 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pheasantly Queued Publication 0.41\n"
+"Project-Id-Version: Pheasantly - Post Queue & Recurring Publishing Schedule 0.43\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pheasantly-queued-publication\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-21T10:00:23+00:00\n"
+"POT-Creation-Date: 2026-07-31T14:57:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pheasantly-queued-publication\n"
 
 #. Plugin Name of the plugin
 #: pheasantly-queued-publication.php
-msgid "Pheasantly Queued Publication"
+msgid "Pheasantly - Post Queue & Recurring Publishing Schedule"
 msgstr ""
 
 #. Description of the plugin
@@ -36,8 +36,8 @@ msgstr ""
 
 #: includes/qpfp-admin-queue-list-trait.php:22
 #: includes/qpfp-admin-queue-list-trait.php:53
-#: includes/qpfp-plugin-trait.php:107
-#: includes/qpfp-plugin-trait.php:108
+#: includes/qpfp-plugin-trait.php:128
+#: includes/qpfp-plugin-trait.php:129
 msgid "Queued Posts"
 msgstr ""
 
@@ -50,9 +50,9 @@ msgid "Toggle View"
 msgstr ""
 
 #: includes/qpfp-admin-slots-trait.php:31
-#: includes/qpfp-plugin-trait.php:87
-#: includes/qpfp-plugin-trait.php:98
-#: includes/qpfp-plugin-trait.php:99
+#: includes/qpfp-plugin-trait.php:108
+#: includes/qpfp-plugin-trait.php:119
+#: includes/qpfp-plugin-trait.php:120
 msgid "Publication Slots"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr ""
 msgid "Show Calendar View"
 msgstr ""
 
-#: includes/qpfp-plugin-trait.php:88
+#: includes/qpfp-plugin-trait.php:109
 msgid "Queue Posts"
 msgstr ""
 

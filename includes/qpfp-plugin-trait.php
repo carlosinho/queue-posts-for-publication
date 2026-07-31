@@ -74,7 +74,7 @@ trait QPFP_Plugin_Trait {
             <span class="qpfp-page-title-text"><?php echo esc_html($title); ?></span>
             <img
                 src="<?php echo esc_url(QPFP_PLUGIN_URL . 'images/pheasants-queue.png'); ?>"
-                alt="Pheasantly Queued Publication"
+                alt="Pheasantly"
                 class="qpfp-page-title-logo"
                 height="40"
             />

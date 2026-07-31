@@ -1,28 +1,38 @@
-=== Pheasantly Queued Publication ===
+=== Pheasantly - Post Queue & Recurring Publishing Schedule ===
 Contributors: karol-k
-Tags: queue, publication, editorial calendar, schedule posts, schedule
+Tags: editorial calendar, content calendar, schedule posts, post scheduler, queue
 Requires at least: 5.0
 Tested up to: 7.0.2
-Stable tag: 0.42
+Stable tag: 0.43
 Requires PHP: 7.4
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Create a recurring publishing schedule (weekly editorial calendar) and queue posts for publication in the next open slot (or pick a slot).
+Set a weekly publishing schedule, then queue drafts to fill the next open slot automatically. A simple editorial calendar of scheduled posts.
 
 == Description ==
 
-Pheasantly Queued Publication lets you queue posts into recurring weekly publication slots.
+Pheasantly turns WordPress scheduling into a queue - recurring weekly.
 
-Define a recurring post schedule or weekly publishing calendar, then queue posts for publication in the next available publishing slot.
+Instead of opening the date picker and working out when your next post should go live, you define your publishing rhythm once - say Tuesday 9:00 AM and Friday 2:00 PM - and then queue drafts into it. 
+
+Each post takes the next free slot. If you've ever used a social media scheduling queue, this is the same idea applied to your blog.
 
 https://www.youtube.com/watch?v=9w5P-ffQmqg
 
-= Fine print =
+= Who this is for =
 
-Uses WordPress' native scheduled posts, but lets you choose publish times from reusable weekly slots such as "Monday 13:00" or "Friday 09:30". This gives your content publishing schedule a predictable rhythm while keeping WordPress as the source of truth for publication.
+* Bloggers who write in batches and want posts trickling out on a consistent schedule
+* Editors managing a content calendar across several contributors
+* Anyone whose publishing schedule is a fixed weekly rhythm rather than a series of one-off dates
 
-The plugin does not create a separate publication queue of post records. It stores reusable slot definitions in one custom table and stores actual scheduled-post state in WordPress core posts with `post_status = future`. WordPress core handles publication in the normal scheduled-post way.
+= How it's different from scheduling posts natively =
+
+WordPress can already schedule a post for a specific date and time. What it can't do is remember your schedule. Every post means picking a date, checking what's already scheduled, and doing the arithmetic yourself.
+
+Pheasantly stores your weekly slots as reusable patterns and fills them in order. Queue five drafts on a Sunday afternoon and they'll go out over the next two and a half weeks without you touching a calendar.
+
+Underneath, these stay ordinary WordPress scheduled posts. Pheasantly just picks the date, core handles publication. Deactivate the plugin and everything you've already queued still publishes exactly as scheduled.
 
 = Features =
 
@@ -255,6 +265,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 
 == Changelog ==
 
+= 0.43 =
+* UI improvements.
+
 = 0.42 =
 * UI improvements.
 
@@ -272,6 +285,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 * Scheduling uses native WordPress future posts.
 
 == Upgrade Notice ==
+
+= 0.43 =
+Tweaks UI mildly.
 
 = 0.42 =
 Tweaks UI to be more smooth.

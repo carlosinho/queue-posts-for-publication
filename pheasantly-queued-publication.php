@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Pheasantly Queued Publication
+ * Plugin Name: Pheasantly - Post Queue & Recurring Publishing Schedule
  * Description: A plugin to queue and schedule posts for future publication on the next available slot.
- * Version: 0.42
+ * Version: 0.43
  * Requires at least: 5.0
  * Requires PHP: 7.4
  * Author: Karol K
@@ -15,7 +15,7 @@
 
 defined('ABSPATH') || exit;
 
-define('QPFP_VERSION', '0.42');
+define('QPFP_VERSION', '0.43');
 define('QPFP_PLUGIN_FILE', __FILE__);
 define('QPFP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('QPFP_PLUGIN_URL', plugin_dir_url(__FILE__));
