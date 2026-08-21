@@ -2,7 +2,7 @@
 Contributors: karol-k
 Tags: editorial calendar, content calendar, schedule posts, post scheduler, queue
 Requires at least: 5.0
-Tested up to: 7.0.2
+Tested up to: 7.1
 Stable tag: 0.43
 Requires PHP: 7.4
 License: GPL v2 or later

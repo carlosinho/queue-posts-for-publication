@@ -50,13 +50,15 @@ WordPress plugin: recurring weekly publication slots in a custom table; editors 
 - [x] Deploy to WordPress.org SVN.
 
 ### v0.50
-- [ ] Making it so that the user role of editor can see queued posts.
-    - Right now, editors can only queue posts for publication, but can't see any of the admin panels.
-    - Make just the "Queued Posts" panel visible to editors - so that they still can't change/add publication slots.
+- [ ] Clear up access permissions - let editors set calendar slots.
+    - Right now, the role of editor can only queue posts for publication, but can't see any of the admin panels.
+- [ ] Add plugin review prompt.
+    - A single polite in-plugin review prompt triggered after a real success milestone (say, the 5th post queued), dismissible forever.
+    - Find the most minimal way to implement this - remembering the state/counter.
 - [ ] Add automatic reshuffling.
     - Make it possible for posts to take over slots of other posts that have already been scheduled, which means reshuffling the other scheduled posts further - by one slot each.
     - I.e. make this example scenario possible: “I want this Monday 1pm slot even though another post is already scheduled there - move that other post to the next free slot.”
-    - There should be a function slotConflict() that is already kind of a placeholder for this.
+    - There is a function slotConflict() already. It's kind of a placeholder for this, I think.
 
 ### Backlog / Future
 
