@@ -173,7 +173,7 @@ Shared scheduling in `QPFP_Scheduler_Trait` (used by both transports):
 
 - `format_available_slots_for_ui()` — slot pickers return `{ id, timestamp, label }` using `date_i18n()` and `get_weekday_labels()`
 - `resolve_queue_slot( $slot_timestamp, $slot_id )` — loads available slots (limit 1 for queue-next, 10 when picking), returns an occurrence or `WP_Error`
-- `schedule_post_on_available_slot( $post_id, $occurrence )` — local `post_date`, `post_date_gmt` via `get_gmt_from_date()`, `wp_insert_post()` with `post_status = future` and existing title/content/excerpt
+- `schedule_post_on_available_slot( $post_id, $occurrence )` — local `post_date`, `post_date_gmt` via `get_gmt_from_date()`, `wp_insert_post()` with `post_status = future` and existing title/content/excerpt, author, and comment/ping status (passed explicitly because `wp_insert_post()` resets omitted fields on update)
 
 REST/AJAX differ only in nonces, HTTP status codes, JSON shape, and the classic editor redirect after queue.
 

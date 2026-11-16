@@ -278,6 +278,9 @@ trait QPFP_Scheduler_Trait {
                 'post_title' => $post->post_title,
                 'post_content' => $post->post_content,
                 'post_excerpt' => $post->post_excerpt,
+                'post_author' => $post->post_author,
+                'comment_status' => $post->comment_status,
+                'ping_status' => $post->ping_status,
             ),
             true
         );

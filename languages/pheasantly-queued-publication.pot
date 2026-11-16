@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pheasantly - Post Queue & Recurring Publishing Schedule 0.43\n"
+"Project-Id-Version: Pheasantly - Post Queue & Recurring Publishing Schedule 0.44\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pheasantly-queued-publication\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

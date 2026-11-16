@@ -3,7 +3,7 @@ Contributors: karol-k
 Tags: editorial calendar, content calendar, schedule posts, post scheduler, queue
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 0.43
+Stable tag: 0.44
 Requires PHP: 7.4
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@ Set a weekly publishing schedule, then queue drafts to fill the next open slot a
 
 Pheasantly turns WordPress scheduling into a queue - recurring weekly.
 
-Instead of opening the date picker and working out when your next post should go live, you define your publishing rhythm once - say Tuesday 9:00 AM and Friday 2:00 PM - and then queue drafts into it. 
+Instead of opening the date picker and working out when your next post should go live, you define your publishing rhythm once - say Tuesday 9:00 AM and Friday 2:00 PM - and then queue drafts into it.
 
 Each post takes the next free slot. If you've ever used a social media scheduling queue, this is the same idea applied to your blog.
 
@@ -265,6 +265,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 
 == Changelog ==
 
+= 0.44 =
+* Fix: queueing a post no longer closes its comments or resets its pingback/trackback setting.
+
 = 0.43 =
 * UI improvements.
 
@@ -285,6 +288,9 @@ If the problem continues, confirm that WordPress normally lets you edit and sche
 * Scheduling uses native WordPress future posts.
 
 == Upgrade Notice ==
+
+= 0.44 =
+Improvements to handling post discussion settings.
 
 = 0.43 =
 Tweaks UI mildly.
